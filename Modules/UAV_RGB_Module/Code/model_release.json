@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "artifact": "checkpoint_final.pt",
+  "size_bytes": 10081318934,
+  "sha256": "a2749dba62207575afac9ed42f923d7cdfd7e2d2f0ffb2210a103e91657d985d",
+  "part_size_bytes": 1900000000,
+  "part_count": 6,
+  "release_tag": "sam3-aug512-v1",
+  "download_base_url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/sam3-aug512-v1",
+  "parts": [
+    {
+      "name": "checkpoint_final.pt.part001",
+      "size_bytes": 1900000000,
+      "sha256": "485c048b2d623718235a9e5e1730d26516086441217b9836caa1e95cb4af146e"
+    },
+    {
+      "name": "checkpoint_final.pt.part002",
+      "size_bytes": 1900000000,
+      "sha256": "31b94da2d3030b49f4b448c216b41d0b3ae9208b988213a1ee74d3287f84be16"
+    },
+    {
+      "name": "checkpoint_final.pt.part003",
+      "size_bytes": 1900000000,
+      "sha256": "9b6b20008e842582fe66fa7653d758d824faa2491be645f5f18c01defa493fd4"
+    },
+    {
+      "name": "checkpoint_final.pt.part004",
+      "size_bytes": 1900000000,
+      "sha256": "10d200a6d8c075b0a30989607d98e7d5f4e126d88d83d6d8cfe455c3927290d6"
+    },
+    {
+      "name": "checkpoint_final.pt.part005",
+      "size_bytes": 1900000000,
+      "sha256": "698f9e592ed0af85a8b2bdbb81ea702611fca5a098acb4b95649980380724ae4"
+    },
+    {
+      "name": "checkpoint_final.pt.part006",
+      "size_bytes": 581318934,
+      "sha256": "5341e50656c3c5afca696759a8263ccda9c2c25d599a901f010e215eef3f46aa"
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -11,21 +10,16 @@ htmlcov/
 *.egg-info/
 build/
 dist/
-
-# IDE / local configuration
 .idea/
 .vscode/
 .env
 .DS_Store
-
-# Heavy local assets: use manifests/downloaders, never normal Git blobs.
 *.pt
+*.pth
+*.pt.part*
+*.pth.part*
 *.partial
 *.log
-01_RawData/geometry/*.obj
-02_Model/sam3_aug512/release/dist/
-02_Model/sam3_aug512/checkpoints/.release_parts/
-
-# Generated runs. Curated lightweight examples may live in 04_Output/examples.
-04_Output/runs/*
-!04_Output/runs/.gitkeep
+.release_parts/
+Demo/*/Output/runs/
+Modules/*/Output/runs/

@@ -1,0 +1,13 @@
+torch>=2.7
+torchvision>=0.22
+numpy>=1.26,<2
+Pillow==12.2.0
+PyYAML>=6
+opencv-python>=4.8,<4.12
+scikit-image>=0.22
+pyproj>=3.6
+trimesh>=4
+rtree>=1.2
+tqdm>=4.66
+openpyxl>=3.1
+sam3 @ git+https://github.com/facebookresearch/sam3.git@46957e47805eaa273f4aa7bbbd25a88bca9108ce

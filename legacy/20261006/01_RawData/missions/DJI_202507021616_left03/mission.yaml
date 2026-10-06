@@ -1,0 +1,36 @@
+schema_version: "1.0"
+mission_id: DJI_202507021616_left03
+capture_date_local: 2025-07-02
+timezone: Asia/Seoul
+camera:
+  make: DJI
+  model: M3E
+  image_width_px: 5280
+  image_height_px: 3956
+  calibrated_focal_length_px: 3725.151611
+  calibrated_optical_center_px: [2640.0, 1978.0]
+  intrinsics_source: embedded DJI XMP
+  dewarp_data_present: true
+  dewarp_applied: false
+positioning:
+  selected_image_count: 7
+  full_mrk_trigger_count: 34
+  filename_index_regex: "_(\\d{4})_"
+  selected_indices: [1, 5, 6, 7, 13, 14, 15]
+  position_priority: [Timestamp.MRK, JPG_XMP]
+  orientation_source: JPG XMP gimbal yaw/pitch/roll
+  source_horizontal_crs: EPSG:4326
+  target_horizontal_crs: EPSG:5186
+  altitude_field: Ellh when MRK is present; otherwise AbsoluteAltitude
+  vertical_datum_verified_against_obj: false
+inference_geometry:
+  source_resized: false
+  source_size_wh: [5280, 3956]
+  padded_size_wh: [5632, 4096]
+  pad_right_px: 352
+  pad_bottom_px: 140
+  tile_size: 512
+  stride: 512
+  tile_count: 88
+  output_crop_wh: [5280, 3956]
+  output_coordinate_space: original source image pixels

@@ -10,4 +10,4 @@
 *.md text eol=lf
 *.yaml text eol=lf
 *.csv text eol=lf
-04_Output/examples/**/damage_results.csv binary
+Modules/UAV_RGB_Module/Output/examples/**/damage_results.csv binary

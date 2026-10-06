@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UAV RGB damage result row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "image",
+    "damage_id",
+    "damage_type",
+    "damage_name_ko",
+    "pixel_nodes_json",
+    "world_center_x_m",
+    "world_center_y_m",
+    "world_center_z_m",
+    "length_px",
+    "length_m",
+    "width_px",
+    "width_m",
+    "area_m2",
+    "source_image_path",
+    "tile_original_paths_json",
+    "tile_overlay_paths_json"
+  ],
+  "properties": {
+    "image": {"type": "string"},
+    "damage_id": {"type": "string", "pattern": "^D[0-9]{6}$"},
+    "damage_type": {"enum": ["CRC", "DLM", "SPL"]},
+    "damage_name_ko": {"enum": ["균열", "박리", "박락"]},
+    "pixel_nodes_json": {"type": ["string", "null"]},
+    "world_center_x_m": {"type": ["number", "null"]},
+    "world_center_y_m": {"type": ["number", "null"]},
+    "world_center_z_m": {"type": ["number", "null"]},
+    "length_px": {"type": ["number", "null"]},
+    "length_m": {"type": ["number", "null"]},
+    "width_px": {"type": ["number", "null"]},
+    "width_m": {"type": ["number", "null"]},
+    "area_m2": {"type": ["number", "null"]},
+    "source_image_path": {
+      "type": "string",
+      "description": "Byte-identical original photo, POSIX path relative to the output root."
+    },
+    "tile_original_paths_json": {
+      "type": "string",
+      "contentMediaType": "application/json",
+      "contentSchema": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+      "description": "JSON array of unresized 512x512 source-tile paths relative to the output root; default display tile first."
+    },
+    "tile_overlay_paths_json": {
+      "type": "string",
+      "contentMediaType": "application/json",
+      "contentSchema": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+      "description": "JSON array of 512x512 overlay paths aligned one-to-one with tile_original_paths_json."
+    }
+  }
+}

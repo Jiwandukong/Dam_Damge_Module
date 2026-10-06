@@ -1,0 +1,37 @@
+model:
+  family: sam3
+  variant: daechung_sam3_aug512_query_balanced_v1
+  upstream_commit: 46957e47805eaa273f4aa7bbbd25a88bca9108ce
+  expected_checkpoint_size: 10081318934
+  expected_checkpoint_sha256: a2749dba62207575afac9ed42f923d7cdfd7e2d2f0ffb2210a103e91657d985d
+  candidate_collection_floor: 0.05
+
+inference:
+  mode: tiled
+  tile_size: 512
+  stride: 512
+  processor_resolution: 1008
+  edge_policy: pad
+  padding_mode: reflect
+  confidence_threshold: 0.5
+  mask_threshold: 0.5
+  candidate_mask_operation: binary_union
+  top_k: null
+  nms: false
+  classes:
+    CRC:
+      id: 1
+      prompt: crack
+    DLM:
+      id: 2
+      prompt: delamination
+    SPL:
+      id: 3
+      prompt: spalling
+
+visualization:
+  alpha: 0.80
+  colors_rgb:
+    CRC: [255, 64, 64]
+    DLM: [255, 210, 0]
+    SPL: [0, 170, 255]

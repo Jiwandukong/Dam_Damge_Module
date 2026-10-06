@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68,<81", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uav-rgb-damage"
+version = "0.1.0"
+description = "AUG512 SAM3 concrete-damage detection with OBJ ray mapping and rough local GSD"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.7",
+  "torchvision>=0.22",
+  "numpy>=1.26,<2",
+  "Pillow>=10",
+  "PyYAML>=6",
+  "opencv-python>=4.8,<4.12",
+  "scikit-image>=0.22",
+  "pyproj>=3.6",
+  "trimesh>=4",
+  "rtree>=1.2",
+  "tqdm>=4.66",
+  "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+mesh-gpu = ["warp-lang>=1.8"]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

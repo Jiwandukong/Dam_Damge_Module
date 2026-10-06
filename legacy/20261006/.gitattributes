@@ -1,0 +1,13 @@
+*.JPG binary
+*.jpg binary
+*.png binary
+*.xlsx binary
+*.bin binary
+*.obs text eol=lf -whitespace
+*.nav text eol=lf -whitespace
+*.MRK text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.csv text eol=lf
+04_Output/examples/**/damage_results.csv binary

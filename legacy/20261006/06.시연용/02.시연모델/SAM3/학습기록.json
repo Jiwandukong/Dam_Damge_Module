@@ -1,0 +1,499 @@
+{
+  "created_utc": "2026-09-10T14:28:12.711344+00:00",
+  "status": "requested_training_complete",
+  "input_size": [
+    512,
+    512
+  ],
+  "input_resized": false,
+  "crc_training_line_width_px": 1,
+  "readout": "sam3_existing_text_conditioned_semantic_head",
+  "target_source": "human_reviewed_labelme_gt",
+  "base_checkpoint_name": "checkpoint_final.pt",
+  "dataset_manifest_sha256": "4bcbf39611f46e1bc8072dd82deb4c16079fb2303f0fa88d2523021b7a1774d6",
+  "seed": 123,
+  "epochs_requested": 20,
+  "learning_rate": 1e-05,
+  "batch_size": 1,
+  "schedule": "only damage-positive tile/class pairs, once per epoch; no negative queries",
+  "training_pairs_per_epoch": 650,
+  "training_tiles": 489,
+  "background_only_tiles_excluded": 1271,
+  "loss": "valid-pixel class-balanced BCE + soft Dice at 512x512",
+  "max_steps": null,
+  "same_image_check_is_generalization_evaluation": false,
+  "crc_training_width_is_physical_width": false,
+  "save_every_epochs": 5,
+  "epoch_summaries": [
+    {
+      "epoch": 1,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.22642657440156,
+      "mean_loss": 1.1651756697835831,
+      "class_mean_loss": {
+        "CRC": 1.3815088406318927,
+        "DLM": 1.146321646569829,
+        "SPL": 0.967466828615769
+      }
+    },
+    {
+      "epoch": 2,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.116838223300874,
+      "mean_loss": 1.032808555727108,
+      "class_mean_loss": {
+        "CRC": 1.2505537194150094,
+        "DLM": 0.9532458663452417,
+        "SPL": 0.8583947453087709
+      }
+    },
+    {
+      "epoch": 3,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.867627238854766,
+      "mean_loss": 0.9438553878435721,
+      "class_mean_loss": {
+        "CRC": 1.1681635316091639,
+        "DLM": 0.7723100547113323,
+        "SPL": 0.8005377923516368
+      }
+    },
+    {
+      "epoch": 4,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.174738293513656,
+      "mean_loss": 0.8725246451658984,
+      "class_mean_loss": {
+        "CRC": 1.0993175047044537,
+        "DLM": 0.6774690794326099,
+        "SPL": 0.7363887544522278
+      }
+    },
+    {
+      "epoch": 5,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.618077985942364,
+      "mean_loss": 0.8320360984939795,
+      "class_mean_loss": {
+        "CRC": 1.0784028026893848,
+        "DLM": 0.661924592127824,
+        "SPL": 0.6671970123121433
+      }
+    },
+    {
+      "epoch": 6,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.87934929318726,
+      "mean_loss": 0.7476340938739192,
+      "class_mean_loss": {
+        "CRC": 0.9932975961279323,
+        "DLM": 0.5322702870762441,
+        "SPL": 0.6018257923188038
+      }
+    },
+    {
+      "epoch": 7,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.8949221028015,
+      "mean_loss": 0.7095869438701238,
+      "class_mean_loss": {
+        "CRC": 0.9728752841021269,
+        "DLM": 0.5608784649313228,
+        "SPL": 0.5199992790163589
+      }
+    },
+    {
+      "epoch": 8,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.13681452907622,
+      "mean_loss": 0.6688454099321881,
+      "class_mean_loss": {
+        "CRC": 0.9322662000892726,
+        "DLM": 0.4737389738355497,
+        "SPL": 0.49796017015562055
+      }
+    },
+    {
+      "epoch": 9,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.74324032012373,
+      "mean_loss": 0.6260060297819571,
+      "class_mean_loss": {
+        "CRC": 0.9083455204963684,
+        "DLM": 0.4563994634247917,
+        "SPL": 0.42681396045161923
+      }
+    },
+    {
+      "epoch": 10,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.69006761908531,
+      "mean_loss": 0.5921272972448227,
+      "class_mean_loss": {
+        "CRC": 0.8573489603195482,
+        "DLM": 0.3998063017622501,
+        "SPL": 0.41840220944942447
+      }
+    },
+    {
+      "epoch": 11,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.08760876767337,
+      "mean_loss": 0.5882410491157609,
+      "class_mean_loss": {
+        "CRC": 0.8803502298493422,
+        "DLM": 0.4195021409291907,
+        "SPL": 0.3794227605820566
+      }
+    },
+    {
+      "epoch": 12,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.0280027622357,
+      "mean_loss": 0.5493407356101446,
+      "class_mean_loss": {
+        "CRC": 0.8091883976723402,
+        "DLM": 0.41974220668531154,
+        "SPL": 0.35526445944813767
+      }
+    },
+    {
+      "epoch": 13,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.901401850394905,
+      "mean_loss": 0.552722575501897,
+      "class_mean_loss": {
+        "CRC": 0.8299492535017828,
+        "DLM": 0.4390342209829084,
+        "SPL": 0.33569252503145003
+      }
+    },
+    {
+      "epoch": 14,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.619961955584586,
+      "mean_loss": 0.4901589933417451,
+      "class_mean_loss": {
+        "CRC": 0.7618201284008171,
+        "DLM": 0.3316748573561199,
+        "SPL": 0.29659017393925646
+      }
+    },
+    {
+      "epoch": 15,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.8316187504679,
+      "mean_loss": 0.49808492260053755,
+      "class_mean_loss": {
+        "CRC": 0.7994872853728651,
+        "DLM": 0.29416417501800296,
+        "SPL": 0.2947215337704435
+      }
+    },
+    {
+      "epoch": 16,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.66669812705368,
+      "mean_loss": 0.47449560974008187,
+      "class_mean_loss": {
+        "CRC": 0.7517671933155934,
+        "DLM": 0.3114109300326423,
+        "SPL": 0.27746781709678203
+      }
+    },
+    {
+      "epoch": 17,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 36.07080598920584,
+      "mean_loss": 0.46525900554198485,
+      "class_mean_loss": {
+        "CRC": 0.7360442099907926,
+        "DLM": 0.29651637776156087,
+        "SPL": 0.27668455172249157
+      }
+    },
+    {
+      "epoch": 18,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.97722066286951,
+      "mean_loss": 0.4518278251323276,
+      "class_mean_loss": {
+        "CRC": 0.7327050024089012,
+        "DLM": 0.27998328923214494,
+        "SPL": 0.25493205547420494
+      }
+    },
+    {
+      "epoch": 19,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.96160475164652,
+      "mean_loss": 0.4417311998385076,
+      "class_mean_loss": {
+        "CRC": 0.7158603522613758,
+        "DLM": 0.2608663111417887,
+        "SPL": 0.2549015969372071
+      }
+    },
+    {
+      "epoch": 20,
+      "complete": true,
+      "steps": 650,
+      "elapsed_seconds": 35.9618876343593,
+      "mean_loss": 0.4233737011930834,
+      "class_mean_loss": {
+        "CRC": 0.7151345346720164,
+        "DLM": 0.24425791422046522,
+        "SPL": 0.2190969974592166
+      }
+    }
+  ],
+  "intermediate_checkpoints": [
+    {
+      "epoch": 5,
+      "file": "sam3_demo512_005회.pt",
+      "sha256": "400975eeabcf2d67732a40ec03068ff629adf5f99f9d7c1417aca016ac9d8558",
+      "bytes": 3367958569
+    },
+    {
+      "epoch": 10,
+      "file": "sam3_demo512_010회.pt",
+      "sha256": "9b4a19e6308d27beca6e06290a9034d07783b734f6068e627ef9515beb523964",
+      "bytes": 3367959273
+    },
+    {
+      "epoch": 15,
+      "file": "sam3_demo512_015회.pt",
+      "sha256": "62a9765df20fc2b1f213a25256c76983bec2eb7f2c11bed9496978c404da4e2c",
+      "bytes": 3367959977
+    }
+  ],
+  "backbone_frozen": true,
+  "trainable_parameters": 10917633,
+  "trainable_parameter_names": [
+    "transformer.encoder.layers.0.self_attn.in_proj_weight",
+    "transformer.encoder.layers.0.self_attn.in_proj_bias",
+    "transformer.encoder.layers.0.self_attn.out_proj.weight",
+    "transformer.encoder.layers.0.self_attn.out_proj.bias",
+    "transformer.encoder.layers.0.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.0.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.0.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.0.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.0.linear1.weight",
+    "transformer.encoder.layers.0.linear1.bias",
+    "transformer.encoder.layers.0.linear2.weight",
+    "transformer.encoder.layers.0.linear2.bias",
+    "transformer.encoder.layers.0.norm1.weight",
+    "transformer.encoder.layers.0.norm1.bias",
+    "transformer.encoder.layers.0.norm2.weight",
+    "transformer.encoder.layers.0.norm2.bias",
+    "transformer.encoder.layers.0.norm3.weight",
+    "transformer.encoder.layers.0.norm3.bias",
+    "transformer.encoder.layers.1.self_attn.in_proj_weight",
+    "transformer.encoder.layers.1.self_attn.in_proj_bias",
+    "transformer.encoder.layers.1.self_attn.out_proj.weight",
+    "transformer.encoder.layers.1.self_attn.out_proj.bias",
+    "transformer.encoder.layers.1.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.1.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.1.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.1.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.1.linear1.weight",
+    "transformer.encoder.layers.1.linear1.bias",
+    "transformer.encoder.layers.1.linear2.weight",
+    "transformer.encoder.layers.1.linear2.bias",
+    "transformer.encoder.layers.1.norm1.weight",
+    "transformer.encoder.layers.1.norm1.bias",
+    "transformer.encoder.layers.1.norm2.weight",
+    "transformer.encoder.layers.1.norm2.bias",
+    "transformer.encoder.layers.1.norm3.weight",
+    "transformer.encoder.layers.1.norm3.bias",
+    "transformer.encoder.layers.2.self_attn.in_proj_weight",
+    "transformer.encoder.layers.2.self_attn.in_proj_bias",
+    "transformer.encoder.layers.2.self_attn.out_proj.weight",
+    "transformer.encoder.layers.2.self_attn.out_proj.bias",
+    "transformer.encoder.layers.2.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.2.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.2.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.2.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.2.linear1.weight",
+    "transformer.encoder.layers.2.linear1.bias",
+    "transformer.encoder.layers.2.linear2.weight",
+    "transformer.encoder.layers.2.linear2.bias",
+    "transformer.encoder.layers.2.norm1.weight",
+    "transformer.encoder.layers.2.norm1.bias",
+    "transformer.encoder.layers.2.norm2.weight",
+    "transformer.encoder.layers.2.norm2.bias",
+    "transformer.encoder.layers.2.norm3.weight",
+    "transformer.encoder.layers.2.norm3.bias",
+    "transformer.encoder.layers.3.self_attn.in_proj_weight",
+    "transformer.encoder.layers.3.self_attn.in_proj_bias",
+    "transformer.encoder.layers.3.self_attn.out_proj.weight",
+    "transformer.encoder.layers.3.self_attn.out_proj.bias",
+    "transformer.encoder.layers.3.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.3.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.3.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.3.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.3.linear1.weight",
+    "transformer.encoder.layers.3.linear1.bias",
+    "transformer.encoder.layers.3.linear2.weight",
+    "transformer.encoder.layers.3.linear2.bias",
+    "transformer.encoder.layers.3.norm1.weight",
+    "transformer.encoder.layers.3.norm1.bias",
+    "transformer.encoder.layers.3.norm2.weight",
+    "transformer.encoder.layers.3.norm2.bias",
+    "transformer.encoder.layers.3.norm3.weight",
+    "transformer.encoder.layers.3.norm3.bias",
+    "transformer.encoder.layers.4.self_attn.in_proj_weight",
+    "transformer.encoder.layers.4.self_attn.in_proj_bias",
+    "transformer.encoder.layers.4.self_attn.out_proj.weight",
+    "transformer.encoder.layers.4.self_attn.out_proj.bias",
+    "transformer.encoder.layers.4.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.4.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.4.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.4.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.4.linear1.weight",
+    "transformer.encoder.layers.4.linear1.bias",
+    "transformer.encoder.layers.4.linear2.weight",
+    "transformer.encoder.layers.4.linear2.bias",
+    "transformer.encoder.layers.4.norm1.weight",
+    "transformer.encoder.layers.4.norm1.bias",
+    "transformer.encoder.layers.4.norm2.weight",
+    "transformer.encoder.layers.4.norm2.bias",
+    "transformer.encoder.layers.4.norm3.weight",
+    "transformer.encoder.layers.4.norm3.bias",
+    "transformer.encoder.layers.5.self_attn.in_proj_weight",
+    "transformer.encoder.layers.5.self_attn.in_proj_bias",
+    "transformer.encoder.layers.5.self_attn.out_proj.weight",
+    "transformer.encoder.layers.5.self_attn.out_proj.bias",
+    "transformer.encoder.layers.5.cross_attn_image.in_proj_weight",
+    "transformer.encoder.layers.5.cross_attn_image.in_proj_bias",
+    "transformer.encoder.layers.5.cross_attn_image.out_proj.weight",
+    "transformer.encoder.layers.5.cross_attn_image.out_proj.bias",
+    "transformer.encoder.layers.5.linear1.weight",
+    "transformer.encoder.layers.5.linear1.bias",
+    "transformer.encoder.layers.5.linear2.weight",
+    "transformer.encoder.layers.5.linear2.bias",
+    "transformer.encoder.layers.5.norm1.weight",
+    "transformer.encoder.layers.5.norm1.bias",
+    "transformer.encoder.layers.5.norm2.weight",
+    "transformer.encoder.layers.5.norm2.bias",
+    "transformer.encoder.layers.5.norm3.weight",
+    "transformer.encoder.layers.5.norm3.bias",
+    "segmentation_head.pixel_decoder.conv_layers.0.weight",
+    "segmentation_head.pixel_decoder.conv_layers.0.bias",
+    "segmentation_head.pixel_decoder.conv_layers.1.weight",
+    "segmentation_head.pixel_decoder.conv_layers.1.bias",
+    "segmentation_head.pixel_decoder.norms.0.weight",
+    "segmentation_head.pixel_decoder.norms.0.bias",
+    "segmentation_head.pixel_decoder.norms.1.weight",
+    "segmentation_head.pixel_decoder.norms.1.bias",
+    "segmentation_head.cross_attend_prompt.in_proj_weight",
+    "segmentation_head.cross_attend_prompt.in_proj_bias",
+    "segmentation_head.cross_attend_prompt.out_proj.weight",
+    "segmentation_head.cross_attend_prompt.out_proj.bias",
+    "segmentation_head.cross_attn_norm.weight",
+    "segmentation_head.cross_attn_norm.bias",
+    "segmentation_head.semantic_seg_head.weight",
+    "segmentation_head.semantic_seg_head.bias"
+  ],
+  "model_geometry": {
+    "loaded_checkpoint": "/home/scsi/Desktop/concrete_crack/checkpoint_final.pt",
+    "loaded_checkpoint_sha256": "a2749dba62207575afac9ed42f923d7cdfd7e2d2f0ffb2210a103e91657d985d",
+    "checkpoint_kind": "base",
+    "base_sha256": "a2749dba62207575afac9ed42f923d7cdfd7e2d2f0ffb2210a103e91657d985d",
+    "checkpoint_loaded_strictly": true,
+    "base_loaded_strictly": true,
+    "sam3_version": "0.1.0",
+    "sam3_source": "/home/scsi/Desktop/concrete_crack/sam3/sam3",
+    "sam3_source_sha256": {
+      "model_builder.py": "faba3d0099f3da6d63d3ca49a8bf945d4014657b813e76ad082602d3922d3ff6",
+      "model/vitdet.py": "76a851c0d7ef1d2d05f37a6e97e791d71f21a4477b82e71306f475f20e4ec2ee",
+      "model/decoder.py": "2bc0ad4ab894f09306e6225c116119f9a696e5b5b3dfa5aafde35081ad68d1e0",
+      "model/maskformer_segmentation.py": "bec9aea2ccd2d337357b9fecec820decc488f2691944a4b3ee0770b3939da94b",
+      "model/sam3_image.py": "c34ae59dba5ef5823da8fbaab66e7d4b78c7df2677efc6e8c9156e3ca80c9b81"
+    },
+    "class_prompts": {
+      "CRC": "crack",
+      "DLM": "delamination",
+      "SPL": "spalling"
+    },
+    "image_tensor_shape": [
+      "B",
+      3,
+      512,
+      512
+    ],
+    "image_normalization": "float RGB [0,1] -> (image - 0.5) / 0.5",
+    "image_resize": false,
+    "rgb_canvas": false,
+    "patch_kernel_stride": 14,
+    "patch_internal_padding_each_side": 3,
+    "patch_token_grid": [
+      37,
+      37
+    ],
+    "global_rope_grid": [
+      37,
+      37
+    ],
+    "local_rope_grid": [
+      24,
+      24
+    ],
+    "local_window_token_padding_grid": [
+      48,
+      48
+    ],
+    "fpn_grids": [
+      148,
+      74,
+      37
+    ],
+    "raw_semantic_grid": [
+      148,
+      148
+    ],
+    "logit_postprocess": "bilinear148->518, crop rows/cols[3:515]",
+    "logit_source": "SAM3 UniversalSegmentationHead.semantic_seg_head",
+    "legacy_instance_union": false,
+    "learned_parameter_shapes_changed": false,
+    "vit_mlp_execution": "original layers, unfused differentiable linear+GELU"
+  },
+  "observed_patch_encoder_input_shape": [
+    1,
+    3,
+    512,
+    512
+  ],
+  "parameters_with_first_step_gradients": 10917633,
+  "selected_parameters_without_first_step_gradient": [],
+  "completed_steps": 13000,
+  "completed_epochs": 20,
+  "last_loss": 0.10828347504138947,
+  "elapsed_seconds": 737.9502158854157,
+  "peak_allocated_gpu_bytes": 3859980800,
+  "demo_quality_validated": false,
+  "checkpoint": {
+    "file": "sam3_demo512_학습완료.pt",
+    "sha256": "eb6489ba6e5aa9b307aef1f1d2b86037ff91d40e22f0deb98e8c704d286079d5",
+    "bytes": 3367960745
+  }
+}
