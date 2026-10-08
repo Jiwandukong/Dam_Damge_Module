@@ -12,3 +12,7 @@
 *.csv text eol=lf
 Modules/UAV_RGB_Module/Output/examples/**/damage_results.csv binary
 Demo/UAV_RGB/Output/Result/*.csv -text
+
+Demo/Multibeam/Output/Result/*.csv -text -whitespace
+Demo/Multibeam/Code/algorithms/*.py -text -whitespace
+Demo/Multibeam/Output/Result/**/*.las binary

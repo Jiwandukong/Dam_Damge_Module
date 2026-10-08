@@ -1,0 +1,110 @@
+{
+  "original_files": {
+    "0318_slab/damage.ipynb": "620f7281843068cbde8b2d59a169c4c42fe7e30df70d583620dea2cc53936332",
+    "0318_slab/slab_damage_analysis_from_las.ipynb": "5988171d4a3b2042e17c396d065129bf52d0daa498879604d83588b5fa9ddbb9",
+    "0318_slab/slab_extraction.py": "d26ccf8eee9248658ad7b2f29cbb1c6f2eee06da2852849d4ba453d51932b47f",
+    "0318_slab/slab_extraction_ransac_region_growing_open3d.ipynb": "6e2698f0057c2de37c9f6624a80c3af05c4cf7fbf6888f8315e6443e3ca36a24",
+    "0318_slab/slab_local_damage_quantification.ipynb": "4d14726bcfaa5482caed244afca34aebed44afa7a736330455cfe43d68f0884a",
+    "0318_slab/slab_scour_linkage_analysis.py": "4ba6c6050de15d5046d554f711491557d20954cfb83260f23e415ffb72c33f80",
+    "CUBE/0312.ipynb": "a22ff3bc533e04629ca3e3b857007aebceb44b640cf77d8fdf6eb18ff3b07540",
+    "CUBE/1012.ipynb": "fe81e3ed788b95f6fc77d3aa6f79d96dc39268d2d871920a8082fe07b9f7c183",
+    "CUBE/cube.ipynb": "fff120e3f04ab5802e8741c01da4c9e4c5ddc520dfc8a79274029f3c75ffa316",
+    "CUBE/lidar.ipynb": "c959e52a5de3b97445c294285be6fe49d6cbc2a6003157233a5a77ba8e918d7e",
+    "CUBE/normal.ipynb": "6a37657d81cdb5794fc258b65c5f34462ff82fdc7e4200f7a73a8d2451439fd8",
+    "CUBE/numba_cube.py": "c145201538284cacc3fe136aa0630e2665231cdf8bcdf4f9cb43a69f04dcd109",
+    "flow_sim.py": "cb1c9912734cc8972ee9a8328c2d6140de7bfcaf14ba67dce23740a313be8ea7"
+  },
+  "algorithm_files": {
+    "cube.py": {
+      "source": "CUBE/1012.ipynb",
+      "cells": [
+        1
+      ],
+      "section": "before_parallel_execution",
+      "sha256": "f0d1730da5f64696c6c2cfa4ed05d99514541bc8da9b77afb242afe31014d391"
+    },
+    "scour.py": {
+      "source": "CUBE/1012.ipynb",
+      "cells": [
+        4
+      ],
+      "section": "functions_only",
+      "sha256": "06309f77b7f96d1eaf963debf72fcc29137d3b0247bcad715aacdd130a975792"
+    },
+    "scour_csv.py": {
+      "source": "CUBE/1012.ipynb",
+      "cells": [
+        5
+      ],
+      "section": null,
+      "sha256": "54a2c14217fae840f2599f418830b5d6e045c47adcc8d119d5fbcd089622fb74"
+    },
+    "scour_xyz.py": {
+      "source": "CUBE/1012.ipynb",
+      "cells": [
+        7
+      ],
+      "section": null,
+      "sha256": "656e00b9a5b48041ce8ad5473168c446f1af692a5a26c86c4cf665212433da4a"
+    },
+    "slab.py": {
+      "source": "0318_slab/slab_extraction_ransac_region_growing_open3d.ipynb",
+      "cells": [
+        2,
+        4,
+        6,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15,
+        17,
+        19,
+        21,
+        23,
+        24,
+        26,
+        28,
+        30,
+        32
+      ],
+      "section": null,
+      "sha256": "dec2707afa3c420a424dea4d9f24e077fe13142a22790196d6bc57b168f08fa1"
+    },
+    "depression.py": {
+      "source": "0318_slab/slab_damage_analysis_from_las.ipynb",
+      "cells": [
+        6
+      ],
+      "section": null,
+      "sha256": "46db413e22d7b554083badfa062afd425939c81d6ac5754b5b824030e95b93f1"
+    },
+    "local_damage.py": {
+      "source": "0318_slab/slab_local_damage_quantification.ipynb",
+      "cells": [
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28
+      ],
+      "section": null,
+      "sha256": "6841319896a8b3a729cf6a383658db8f16fdd6ba8767c3f2eda8c6ee10a801a6"
+    },
+    "numba_cube.py": {
+      "source": "CUBE/numba_cube.py",
+      "cells": null,
+      "section": "whole_file",
+      "sha256": "c145201538284cacc3fe136aa0630e2665231cdf8bcdf4f9cb43a69f04dcd109"
+    }
+  }
+}

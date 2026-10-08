@@ -23,3 +23,8 @@ dist/
 .release_parts/
 Demo/*/Output/runs/
 Modules/*/Output/runs/
+
+# Multibeam Release assets and processing workspace
+Demo/Multibeam/Data/*.las
+Demo/Multibeam/Output/Result/SC/SC-002.las
+Demo/unmodified_multibeam/

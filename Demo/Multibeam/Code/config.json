@@ -1,0 +1,8 @@
+{
+  "excluded_inputs": [
+    "03_EYAS_GR_Total.e57"
+  ],
+  "excluded_input_patterns": [
+    "*multibeam_B*"
+  ]
+}
