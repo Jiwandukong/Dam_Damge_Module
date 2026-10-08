@@ -1,25 +1,9 @@
-# Standalone demo runtime. SAM3 revision is recorded in upstream.json.
-# Versions used for the published results; avoid silently changing inference
-# or measurement behavior when installing into a fresh Python 3.11 environment.
-torch==2.12.0
-torchvision==0.27.0
-timm==1.0.27
-numpy==1.26.4
-Pillow==12.2.0
-PyYAML==6.0.3
-opencv-python==4.11.0.86
+torch==2.7.1
+transformers==4.56.2
+numpy==2.2.6
+scipy==1.16.2
+Pillow==11.3.0
 scikit-image==0.26.0
-scipy==1.17.1
+opencv-python-headless==4.11.0.86
 pyproj==3.7.2
-trimesh==4.12.2
-rtree==1.4.1
-tqdm==4.68.2
-openpyxl==3.1.5
 warp-lang==1.14.0
-regex==2026.9.3
-# SAM3 model-builder imports not fully declared by its package metadata.
-setuptools==80.10.2
-einops==0.8.2
-psutil==7.2.2
-pycocotools==2.0.11
-sam3 @ git+https://github.com/facebookresearch/sam3.git@46957e47805eaa273f4aa7bbbd25a88bca9108ce

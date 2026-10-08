@@ -1,6 +1,0 @@
-{
-  "sam3_repository": "https://github.com/facebookresearch/sam3",
-  "sam3_commit": "46957e47805eaa273f4aa7bbbd25a88bca9108ce",
-  "sam3_version": "0.1.0",
-  "validated_python_version": "3.11"
-}
