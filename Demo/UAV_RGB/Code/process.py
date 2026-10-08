@@ -38,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CLASSES = ('CRC', 'DLM', 'SPL', 'LEAK_EFF')
 OUTPUT_CLASSES = ('CRC', 'DLM', 'SPL', 'LKG')
 NAMES = {'CRC': '균열', 'DLM': '박리', 'SPL': '박락', 'LKG': '누수·백태'}
+COLORS = {'CRC': (255,0,0), 'DLM': (0,255,0), 'SPL': (255,255,0), 'LKG': (0,0,255)}
 RELEASE_BASE = 'https://github.com/Jiwandukong/Dam_Damge_Module/releases/download'
 CACHE = Path(os.environ.get('XDG_CACHE_HOME', str(Path.home()/'.cache'))) / 'dam_damage_module'
 MODEL_ASSET = 'dinov3_damage_demo.pt'
@@ -272,7 +273,7 @@ def export_image(image_path, probability, mask_for_class, surface, output, all_r
             raw = image.crop((x,y,x+w,y+h))
             selected = np.zeros((h,w),np.uint8)
             selected[ys.start-y:ys.stop-y,xs.start-x:xs.stop-x] = local.astype(np.uint8)*255
-            painted = raw.copy();painted.paste((255,0,0),(0,0),Image.fromarray(selected))
+            painted = raw.copy();painted.paste(COLORS[published_kind],(0,0),Image.fromarray(selected))
             overlay = Image.blend(raw,painted,.3)
             destination = output/'Overlay'/published_kind/f'{damage_id}.png'
             destination.parent.mkdir(parents=True,exist_ok=True)
