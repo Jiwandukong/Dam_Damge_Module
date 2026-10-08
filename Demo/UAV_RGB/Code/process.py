@@ -46,7 +46,8 @@ DAM_ASSET = 'daecheongdam_grid5m.zip'
 MODEL_TAG = 'dinov3-uav-demo-v1'
 DAM_TAG = 'daecheong-dam-grid5m-v1'
 MODEL_SHA256 = '05d636ae06d2b58327526f64c0b0599e31c4484abd188f82f83ec7d6a5573acc'
-DAM_SHA256 = 'ca417b6e779727d6f6a38d6839b13d767e0163f97f951bf918e8baf5cd24f1f8'
+DAM_SHA256 = '795eed4f684ddb7ada2669b2555d627d2b337782587763fc0ffb332acd9820cf'
+DAM_MODEL_SHA256 = '4096486bd10baa62e51988e0424eb66b1191b58dcc58a410b97a6e5d03edb4f7'
 LOCAL_CHECKPOINT = ROOT.parent / 'DINOv3_Damage_Demo/runs/20261006_train_reconstruction/demo_model.pt'
 LOCAL_MODEL = ROOT.parent / 'Dam_model/Daecheongdam/daecheongdam_regions_grid5m.gltf'
 DEFAULT_CHECKPOINT = LOCAL_CHECKPOINT if LOCAL_CHECKPOINT.is_file() else CACHE/MODEL_ASSET
@@ -89,11 +90,16 @@ def prepare_release_assets(args):
         if args.checkpoint!=CACHE/MODEL_ASSET:
             raise FileNotFoundError('Checkpoint not found: '+str(args.checkpoint))
         download_verified(f'{RELEASE_BASE}/{MODEL_TAG}/{MODEL_ASSET}',args.checkpoint,MODEL_SHA256)
-    if not args.dam_model.is_file():
-        if args.dam_model!=CACHE/'Daecheongdam/daecheongdam_regions_grid5m.gltf':
+    archive = CACHE/DAM_ASSET
+    cached_model = CACHE/'Daecheongdam/daecheongdam_regions_grid5m.gltf'
+    needs_dam_model = not args.dam_model.is_file()
+    if args.dam_model==cached_model and not needs_dam_model:
+        needs_dam_model = (sha(args.dam_model)!=DAM_MODEL_SHA256 or
+                           not archive.is_file() or sha(archive)!=DAM_SHA256)
+    if needs_dam_model:
+        if args.dam_model!=cached_model:
             raise FileNotFoundError('Native dam model not found: '+str(args.dam_model))
-        archive = CACHE/DAM_ASSET
-        download_verified(f'{RELEASE_BASE}/{DAM_TAG}/{DAM_ASSET}',archive,DAM_SHA256)
+        download_verified(f'{RELEASE_BASE}/{DAM_TAG}/{DAM_ASSET}?sha256={DAM_SHA256}',archive,DAM_SHA256)
         with zipfile.ZipFile(archive) as bundle:
             for member in bundle.infolist():
                 target = (CACHE/member.filename).resolve()
@@ -102,6 +108,8 @@ def prepare_release_assets(args):
             bundle.extractall(CACHE)
         if not args.dam_model.is_file():
             raise FileNotFoundError('Expected gridded glTF is absent from the Release package')
+        if sha(args.dam_model)!=DAM_MODEL_SHA256:
+            raise ValueError('Gridded glTF SHA256 mismatch after Release extraction')
 
 
 def crop_box(bbox, size):

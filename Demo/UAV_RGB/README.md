@@ -60,7 +60,7 @@ Overlay는 균열 빨강, 박리 초록, 박락 노랑, 누수·백태 파랑으
 | Release | 파일 |
 |---|---|
 | [DINOv3 손상 탐지 모델](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/dinov3-uav-demo-v1) | [dinov3_damage_demo.pt 다운로드](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/dinov3-uav-demo-v1/dinov3_damage_demo.pt) |
-| [대청댐 격자화 3D 모델](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/daecheong-dam-grid5m-v1) | [daecheongdam_grid5m.zip 다운로드](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/daecheong-dam-grid5m-v1/daecheongdam_grid5m.zip) — glTF, BIN 2개, 텍스처 18개 포함 |
+| [대청댐 격자화 3D 모델](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/daecheong-dam-grid5m-v1) | [daecheongdam_grid5m.zip 다운로드](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/daecheong-dam-grid5m-v1/daecheongdam_grid5m.zip?sha256=795eed4f684ddb7ada2669b2555d627d2b337782587763fc0ffb332acd9820cf) — 하상부 포함 glTF, BIN 2개, 텍스처 18개 포함 |
 
 Python 3.13 및 NVIDIA GPU 환경에서 `Demo/UAV_RGB/`로 이동한 뒤 실행합니다.
 
@@ -70,6 +70,8 @@ python Code/process.py
 ```
 
 첫 실행 시 모델 파일이 없으면 Release에서 자동 다운로드하고 SHA256을 확인합니다. 저장 위치는 사용자 캐시 폴더 `~/.cache/dam_damage_module/`이며, 3D 모델 ZIP은 자동으로 압축 해제합니다. DINO 추론은 GPU 0번에서 실행하고 결과는 `Output/`에 저장합니다.
+
+기본 3D 모델 캐시는 Release SHA256이 바뀌면 새 모델로 자동 갱신합니다. 2026-10-09 업데이트에는 하상부 격자 425개가 추가됐습니다.
 
 직접 다운로드할 경우 `daecheongdam_grid5m.zip`을 압축 해제한 뒤 파일 경로를 지정합니다.
 
