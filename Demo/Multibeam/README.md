@@ -84,28 +84,6 @@ Multibeam/
 | `pointcloud_path`, `visualization_path` | 손상 LAS·PNG 경로. CSV 기준 상대경로. |
 | `boundary_xy_json` | 원본 검출 경계와 내부 구멍을 포함한 GeoJSON 형식 좌표. EPSG:5186, m. |
 
-## 모델 격자·부재 연결
-
-기준 모델은 `../Dam_model/Daecheongdam/daecheongdam_regions_grid5m.gltf`와 이 모델이 참조하는 두 BIN 파일입니다. glTF 노드의 계층 변환을 적용하고 `(X,Z,-Y)` 축을 EPSG:5186의 `(X,Y,Z)`로 변환합니다. 손상 중앙점의 X/Y를 모델의 실제 격자 삼각형에 수직 투영합니다. 같은 X/Y에 여러 표면이 겹치면 손상 중앙점 Z와 가장 가까운 모델 표면을 선택합니다. 손상 중심 좌표와 원본 LAS는 그대로 유지합니다.
-
-현재 5개 손상의 상위 부재는 모두 `SPW_감세공_물받이공(수면_아래)`이며, 부재 ID는 모델에 저장된 `c5571851-01c5-5e96-ae42-6b41140c881b`입니다.
-
-| 손상 ID | 중앙점 대응 격자 ID |
-|---|---|
-| SC-001 | SPW_1030 |
-| SC-002 | SPW_0959 |
-| DP-001 | SPW_0540 |
-| DP-002 | SPW_0441 |
-| DP-003 | SPW_0472 |
-
-격자 ID는 손상 중앙점에 대응하는 한 개의 격자입니다. 넓은 손상 경계가 겹치는 모든 격자를 나열한 값은 아닙니다. 현재 관측 중심점은 투영된 모델 표면보다 약 2.06–2.39m 높으므로, 이 연결은 X/Y에 따른 수직 투영 기준입니다. 모델에 맞춰 관측 높이를 보정하지 않습니다. 모델 표면 좌표·높이 차이·삼각형·매핑 상태·모델 SHA256은 최종 산출물 폴더 밖의 `Multibeam_work/verification/model_mapping.json`에 기록합니다.
-
-원본 처리와 산출물 재추출 과정에서도 같은 연결을 자동 적용합니다. 격자 X/Y 범위 밖의 중심점이나 모델이 없는 환경에서는 ID를 빈값으로 남깁니다. 모델 경로는 `Code/config.json`의 `model_mapping.model_path` 또는 `MULTIBEAM_MODEL_PATH`로 지정합니다. 기존 CSV의 격자·부재 정보만 다시 갱신할 때는 설치된 Python 환경에서 다음 명령을 실행합니다.
-
-```bash
-python3 Code/map_model.py --model ../Dam_model/Daecheongdam/daecheongdam_regions_grid5m.gltf
-```
-
 ## 다운로드
 
 원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v5)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
@@ -129,7 +107,7 @@ python3 Code/download_assets.py --scope results
 
 직접 다운로드할 때는 ZIP 안의 `Data/` 또는 `Output/`을 `Multibeam` 폴더 아래에 압축 해제합니다.
 
-배포된 CSV에는 격자 ID·부재 ID·부재 이름이 포함되어 있습니다. 매핑 기준 모델을 바꾸거나 이전 버전 CSV를 갱신할 때는 위 `Code/map_model.py` 명령을 사용합니다.
+배포된 CSV에는 격자 ID·부재 ID·부재 이름이 포함되어 있습니다.
 
 ## 3D 스냅샷 다시 생성
 
