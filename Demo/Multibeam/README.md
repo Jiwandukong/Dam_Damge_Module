@@ -1,6 +1,6 @@
 # Multibeam 손상 탐지 산출물
 
-대청댐 A 멀티빔 원본 점군에서 검출된 **세굴(SC) 2개, 슬래브 함몰(DP) 4개**를 손상별 LAS 점군·Overlay PNG·CSV로 정리했습니다. 기존 CUBE, 세굴 검출, 슬래브 추출, 함몰 검출 알고리즘과 원본 손상 수치를 유지했습니다. 현재 산출물은 기존 A 분석 결과에서 추출한 결과이며, 재계산 결과와 CSV의 `result_origin`으로 구분합니다.
+대청댐 A 멀티빔 원본 점군에서 검출된 **세굴(SC) 2개, 슬래브 함몰(DP) 4개**를 손상별 LAS 점군·Visualiza 3D PNG·CSV로 정리했습니다. 기존 CUBE, 세굴 검출, 슬래브 추출, 함몰 검출 알고리즘과 원본 손상 수치를 유지했습니다. 현재 산출물은 기존 A 분석 결과에서 추출한 결과이며, 재계산 결과와 CSV의 `result_origin`으로 구분합니다.
 
 ## 폴더 구성
 
@@ -11,12 +11,13 @@ Multibeam/
 ├── Code/
 │   ├── process.py
 │   ├── export_results.py
+│   ├── visualize_results.py
 │   ├── download_assets.py
 │   ├── algorithms/
 │   ├── tools/
 │   └── 실행·설치 보조 파일
 ├── Output/
-│   ├── Overlay/
+│   ├── Visualiza/
 │   │   ├── SC/SC-001.png, SC-002.png
 │   │   └── DP/DP-001.png ~ DP-004.png
 │   └── Result/
@@ -33,11 +34,13 @@ Multibeam/
 | `Code/` | 원본 계산 코드, 실행 연결 코드, 손상별 점군 추출·이미지·CSV 생성 코드, 설치 의존성. |
 | `Output/Result/SC/` | 기존 세굴 폴리곤 안의 원본 A LAS 관측점을 추출한 점군. 원본 XYZ와 점 속성을 유지합니다. |
 | `Output/Result/DP/` | 기존 함몰 후보점 중 해당 패치에 속한 점을 원본 슬래브 LAS와 좌표로 매칭하여 추출한 점군. 원본 XYZ와 속성을 유지하고 `depression_depth_m` 속성을 추가합니다. |
-| `Output/Overlay/SC/` | CUBE 관측 표면을 XY 평면으로 표시하고 세굴 경계를 주황색으로 강조한 PNG. |
-| `Output/Overlay/DP/` | 주변 슬래브 관측점을 XY 평면으로 표시하고 함몰점을 청록색으로 강조한 PNG. |
+| `Output/Visualiza/SC/` | 세굴 LAS의 실제 XYZ와 주변 원본 관측점으로 만든 3D 스냅샷. 점의 색은 실제 표고입니다. |
+| `Output/Visualiza/DP/` | 함몰 LAS의 실제 XYZ와 주변 슬래브 관측점으로 만든 3D 스냅샷. 점의 색은 점별 함몰 깊이입니다. |
 | `Output/Result/*.csv` | 손상별 치수, 중앙 표출 좌표, LAS·PNG 상대경로. UTF-8 BOM 인코딩. |
 
-각 손상은 **LAS 1개와 PNG 1개**에 대응합니다. PNG는 1200×1200이며 축의 원점 `(0, 0)`과 `+` 표시는 해당 손상의 중앙점입니다. 점군 이미지를 그릴 때만 표시 점 수를 제한하며 LAS에는 추출된 모든 점을 저장합니다.
+각 손상은 **LAS 1개와 PNG 1개**에 대응합니다. PNG는 1800×1050의 3D 스냅샷입니다. 왼쪽은 XYZ 실제 축척(1:1:1), 오른쪽은 높이 차를 읽기 위한 Z 확대 보기입니다. 두 보기는 같은 관측 점군이며, 오른쪽의 확대 배율을 이미지에 표시합니다. 축은 중앙점 기준 X/Y/Z 거리(m)이고 `+` 표시는 손상 중앙점입니다.
+
+이미지에만 점 수 제한과 Z 표시 확대를 적용하며, LAS의 관측 XYZ·점 속성·전체 점 수는 유지합니다. 주변 관측점은 회색으로 표시합니다. 세굴의 색은 실제 표고, 함몰의 색은 해당 관측점의 `depression_depth_m`입니다. 점별 함몰 깊이와 CSV의 격자 패치 깊이는 원본 계산 대상이 다르므로 값이 다를 수 있습니다.
 
 ## 현재 산출물
 
@@ -80,17 +83,17 @@ Multibeam/
 | `analysis_method`, `analysis_resolution_m` | 세굴 처리 방법·격자 해상도. 함몰 방법은 `reference_plane`. |
 | `result_origin` | `existing_results`: 기존 검출 결과에서 추출. `computed`: 실행 코드로 새로 계산. |
 | `source_data_path` | 원본 입력 경로. CSV 기준 상대경로. |
-| `pointcloud_path`, `overlay_path` | 손상 LAS·PNG 경로. CSV 기준 상대경로. |
+| `pointcloud_path`, `visualization_path` | 손상 LAS·PNG 경로. CSV 기준 상대경로. |
 | `boundary_xy_json` | 원본 검출 경계와 내부 구멍을 포함한 GeoJSON 형식 좌표. EPSG:5186, m. |
 
 ## 다운로드
 
-원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v1)로 제공합니다. 작은 LAS, Overlay PNG, CSV, 실행 코드는 저장소에 포함합니다.
+원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v2)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
 
 | Release 파일 | 내용 |
 |---|---|
-| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v1/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
-| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v1/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
+| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
+| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
 
 `Demo/Multibeam` 폴더에서 다음 명령으로 다운로드·압축 해제합니다. ZIP과 내부 파일의 SHA256을 확인합니다.
 
@@ -105,6 +108,22 @@ python3 Code/download_assets.py --scope results
 ```
 
 직접 다운로드할 때는 ZIP 안의 `Data/` 또는 `Output/`을 `Multibeam` 폴더 아래에 압축 해제합니다.
+
+## 3D 스냅샷 다시 생성
+
+기존 LAS와 CSV로 3D PNG만 다시 만들 수 있습니다. 손상 검출과 LAS 추출은 다시 수행하지 않습니다.
+
+```bash
+python3 Code/visualize_results.py
+```
+
+SC는 `Data`의 원본 LAS가 있으면 주변 관측점도 함께 표시합니다. DP의 주변 관측점을 함께 표시하려면 기존 분석 중간 결과의 슬래브 LAS를 지정합니다.
+
+```bash
+python3 Code/visualize_results.py --slab-source /path/to/slab.las
+```
+
+원본 분석을 실행하면 SC·DP의 주변 관측점까지 포함한 3D 스냅샷을 자동 생성합니다. 이미지 경로는 CSV의 `visualization_path`에 저장합니다.
 
 ## 원본에서 실행
 

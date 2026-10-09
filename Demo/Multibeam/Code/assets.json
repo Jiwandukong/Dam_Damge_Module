@@ -1,11 +1,11 @@
 {
   "repo": "Jiwandukong/Dam_Damge_Module",
-  "release": "multibeam-demo-v1",
+  "release": "multibeam-demo-v2",
   "assets": [
     {
       "scope": "raw",
       "name": "multibeam_A_rawdata.zip",
-      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v1/multibeam_A_rawdata.zip",
+      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_rawdata.zip",
       "bytes": 171602238,
       "sha256": "a84cd4972af44e9d25b3b052171689b32dd236e4c45ef8d3175340aff13eb4a4",
       "members": [
@@ -19,40 +19,10 @@
     {
       "scope": "results",
       "name": "multibeam_A_results.zip",
-      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v1/multibeam_A_results.zip",
-      "bytes": 22075143,
-      "sha256": "0e1346b762d01558ff659957ccb573cbb639e79d89e336cdd34c0cddd848be62",
+      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_results.zip",
+      "bytes": 21683132,
+      "sha256": "86bce48a4b4b640888a9d6a825761e489241ac22d28273470aee95e7344be29b",
       "members": [
-        {
-          "path": "Output/Overlay/DP/DP-001.png",
-          "bytes": 972258,
-          "sha256": "1d63c121203bd34585665252f06b79b89449e73f0f72f55b7354fe4694126ce2"
-        },
-        {
-          "path": "Output/Overlay/DP/DP-002.png",
-          "bytes": 754288,
-          "sha256": "27148c8b59d75a7ab776a17773559d85753613ac71e926006738c612200281ed"
-        },
-        {
-          "path": "Output/Overlay/DP/DP-003.png",
-          "bytes": 881920,
-          "sha256": "2afbe549655e4baa31a789dd7749adb8c2b1c6616e231e9226f8efca0d20896c"
-        },
-        {
-          "path": "Output/Overlay/DP/DP-004.png",
-          "bytes": 241391,
-          "sha256": "b5abd486413b1ed068a4dc3dcd952f34feb0bb3a3dbeafa31ff816e59e78f8d2"
-        },
-        {
-          "path": "Output/Overlay/SC/SC-001.png",
-          "bytes": 78336,
-          "sha256": "843fa380c070847dcc01df76d40db080ef884be420a42b112fe473f6d32eeff1"
-        },
-        {
-          "path": "Output/Overlay/SC/SC-002.png",
-          "bytes": 116016,
-          "sha256": "302bf353d52526c551a8e71c41daa7cfd75c4975ffb61b7304dc61978e5b4cc2"
-        },
         {
           "path": "Output/Result/DP/DP-001.las",
           "bytes": 5921740,
@@ -75,8 +45,8 @@
         },
         {
           "path": "Output/Result/DP_result.csv",
-          "bytes": 7607,
-          "sha256": "c697b6a5ca6463e8fb36798b8cf6aa725fb1b86acfaa793dc58599f18134e8f8"
+          "bytes": 7621,
+          "sha256": "e95330921119c12d20694c9952a5e9cf8aa10265f6ed2eb207c7794b5c39ca78"
         },
         {
           "path": "Output/Result/SC/SC-001.las",
@@ -90,8 +60,38 @@
         },
         {
           "path": "Output/Result/SC_result.csv",
-          "bytes": 7181,
-          "sha256": "81c43f18dbe9fb9d5e06e7f51a09eb9f37ef9b1c7e9def5e93bb606ec331251a"
+          "bytes": 7191,
+          "sha256": "02d8b2a000bbc085d4985a81e0c305899c7e0d3573fb83d2419d444b3686b9c6"
+        },
+        {
+          "path": "Output/Visualiza/DP/DP-001.png",
+          "bytes": 527145,
+          "sha256": "f35677df0a97fc01efefd78be3d7c3aa0790dda2caf3f7483998bd8f72d740e3"
+        },
+        {
+          "path": "Output/Visualiza/DP/DP-002.png",
+          "bytes": 443221,
+          "sha256": "9889e30b870a03d0ff7b72b6df90297b262b8e1147be47c7408db1721c6dcbf1"
+        },
+        {
+          "path": "Output/Visualiza/DP/DP-003.png",
+          "bytes": 495696,
+          "sha256": "ec094ed30573e390cff9fdbb5e89ef4dd88aef11ccf57540d8a642693babea62"
+        },
+        {
+          "path": "Output/Visualiza/DP/DP-004.png",
+          "bytes": 387240,
+          "sha256": "92ba7b5b898f6c240919e3d328b3a2bceb23f5792ef3a5edd42506f651b48cf6"
+        },
+        {
+          "path": "Output/Visualiza/SC/SC-001.png",
+          "bytes": 439312,
+          "sha256": "ad9805da9797a802b4e21181fec1957806942fbeeb62ab8c52a7caa545b85ea7"
+        },
+        {
+          "path": "Output/Visualiza/SC/SC-002.png",
+          "bytes": 381973,
+          "sha256": "3fca381a751c2d8c819595520aa50894127d9c590eb1f34007128f07de26f1df"
         }
       ]
     }

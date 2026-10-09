@@ -9,7 +9,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import shutil
 import sys
 import tempfile
 
@@ -17,20 +16,13 @@ sys.dont_write_bytecode = True
 
 import geopandas as gpd
 import laspy
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
-from matplotlib.patches import PathPatch
-from matplotlib.path import Path as PlotPath
 import numpy as np
 import pandas as pd
 from pyproj import CRS
-import rasterio
-from rasterio.windows import from_bounds
 import shapely
 
 from runtime import CODE, file_hash, write_json
+from visualize_results import collect_context, make_visualization
 
 ROOT = CODE.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam" / "Multibeam_work"
@@ -38,9 +30,8 @@ FIELDS = ["dataset", "damage_id", "source_damage_id", "damage_type", "damage_nam
           "world_center_x_m", "world_center_y_m", "world_center_z_m", "crs",
           "area_m2", "mean_depth_m", "max_depth_m", "median_depth_m", "volume_loss_m3",
           "point_count", "pointcloud_selection", "analysis_method", "analysis_resolution_m", "result_origin",
-          "source_data_path", "pointcloud_path", "overlay_path", "boundary_xy_json"]
+          "source_data_path", "pointcloud_path", "visualization_path", "boundary_xy_json"]
 KEY_DTYPE = np.dtype([("X", "<i4"), ("Y", "<i4"), ("Z", "<i4")])
-COLORS = {"SC": "#ed713d", "DP": "#087e87"}
 
 
 def in_polygon(geometry, x, y):
@@ -121,7 +112,7 @@ def load_features(results, dataset, method, resolution):
                 "source_gpkg": path,
             }
             features.append(feature)
-    return features, results / "tif" / (stem + ".tif")
+    return features
 
 
 def read_existing(output):
@@ -130,7 +121,10 @@ def read_existing(output):
         path = output / "Result" / (kind + "_result.csv")
         if path.exists():
             with path.open(encoding="utf-8-sig", newline="") as stream:
-                rows.extend(csv.DictReader(stream))
+                for row in csv.DictReader(stream):
+                    if "overlay_path" in row:
+                        row["visualization_path"] = row.pop("overlay_path")
+                    rows.append(row)
     return rows
 
 
@@ -214,10 +208,6 @@ def extract_depression(results, features, staging):
         for points in reader.chunk_iterator(500_000):
             x, y, z = np.asarray(points.x), np.asarray(points.y), np.asarray(points.z)
             for feature in features:
-                west, south, east, north = feature["context_bounds"]
-                context = (x >= west) & (x <= east) & (y >= south) & (y <= north)
-                if context.any():
-                    feature["context"].append(np.column_stack([x[context], y[context], z[context]]))
                 indices = in_polygon(feature["geometry"], x, y)
                 keys = feature["candidate_keys"]
                 if not len(indices) or not len(keys):
@@ -279,66 +269,6 @@ def verify_las(feature, staging, native_header):
             "center_z_sample_xy": feature["center_z_sample_xy"]}
 
 
-def draw_boundary(ax, geometry, center, color):
-    parts = [geometry] if geometry.geom_type == "Polygon" else list(geometry.geoms)
-    for part in parts:
-        vertices, codes = [], []
-        for ring in [part.exterior, *part.interiors]:
-            xy = np.array(ring.coords)[:, :2] - center
-            vertices.extend(xy.tolist())
-            codes.extend([PlotPath.MOVETO] + [PlotPath.LINETO] * (len(xy) - 2) + [PlotPath.CLOSEPOLY])
-            ax.plot(xy[:, 0], xy[:, 1], color=color, lw=1.5)
-        ax.add_patch(PathPatch(PlotPath(vertices, codes), facecolor=color, alpha=0.12, edgecolor="none"))
-
-
-def make_overlay(feature, raster, staging):
-    center = np.array([feature["geometry"].centroid.x, feature["geometry"].centroid.y])
-    west, south, east, north = feature["context_bounds"]
-    fig, ax = plt.subplots(figsize=(7.5, 7.5), dpi=160)
-    fig.patch.set_facecolor("white")
-    ax.set_facecolor("#f3f6f8")
-    if feature["kind"] == "SC":
-        with rasterio.open(raster) as src:
-            window = from_bounds(west, south, east, north, src.transform).round_offsets().round_lengths()
-            values = src.read(1, window=window, boundless=True, fill_value=np.nan)
-            bounds = rasterio.windows.bounds(window, src.transform)
-        masked = np.ma.masked_invalid(values)
-        image = ax.imshow(masked, extent=[bounds[0] - center[0], bounds[2] - center[0],
-                                        bounds[1] - center[1], bounds[3] - center[1]],
-                          origin="upper", interpolation="nearest", cmap="Greys")
-        bar = fig.colorbar(image, ax=ax, fraction=0.045, pad=0.025)
-        bar.set_label("Observed surface Z (m)", color="#52687a")
-    else:
-        context = np.concatenate(feature["context"]) if feature["context"] else np.empty((0, 3))
-        if len(context) > 60_000:
-            context = context[np.linspace(0, len(context) - 1, 60_000, dtype=int)]
-        ax.scatter(context[:, 0] - center[0], context[:, 1] - center[1], s=0.8, c="#aebdc7", alpha=0.7, rasterized=True)
-        cloud = laspy.read(staging / f"Result/DP/{feature['id']}.las")
-        take = np.linspace(0, len(cloud.points) - 1, min(60_000, len(cloud.points)), dtype=int)
-        ax.scatter(np.asarray(cloud.x)[take] - center[0], np.asarray(cloud.y)[take] - center[1],
-                   s=1.0, c=COLORS["DP"], alpha=0.8, rasterized=True)
-    draw_boundary(ax, feature["geometry"], center, COLORS[feature["kind"]])
-    ax.scatter([0], [0], marker="+", s=105, c="#152f44", linewidths=1.8, zorder=10)
-    ax.set_xlim(west - center[0], east - center[0])
-    ax.set_ylim(south - center[1], north - center[1])
-    ax.set_aspect("equal")
-    ax.set_xlabel("X offset from damage center (m)", color="#52687a")
-    ax.set_ylabel("Y offset from damage center (m)", color="#52687a")
-    ax.grid(alpha=0.15, color="#71889a", lw=0.5)
-    ax.tick_params(labelsize=9, colors="#52687a")
-    for spine in ax.spines.values(): spine.set_color("#d9e2e8")
-    name = "Scour" if feature["kind"] == "SC" else "Slab depression"
-    fig.suptitle(f"{feature['id']}  |  {name}", x=0.11, y=0.965, ha="left", fontsize=17, fontweight="bold", color="#17394e")
-    fig.text(0.11, 0.91, f"Area {feature['area']:.2f} m²    Mean depth {feature['mean_depth']:.3f} m    Max depth {feature['max_depth']:.3f} m", fontsize=9, color="#52687a")
-    legend = [Line2D([0], [0], color=COLORS[feature["kind"]], lw=2, label="Detected boundary"),
-              Line2D([0], [0], color="#152f44", marker="+", linestyle="none", markersize=9, label="Damage center")]
-    ax.legend(handles=legend, loc="upper right", fontsize=8, framealpha=0.92)
-    fig.text(0.11, 0.045, f"Center: X {center[0]:.3f}  Y {center[1]:.3f}  Z {feature['center_z']:.3f} m  |  EPSG:5186", fontsize=9, color="#52687a")
-    fig.subplots_adjust(left=0.11, right=0.91, top=0.88, bottom=0.13)
-    fig.savefig(staging / f"Overlay/{feature['kind']}/{feature['id']}.png", facecolor="white")
-    plt.close(fig)
-
-
 def export_results(results, source_input, las_source=None, output=None, work=None,
                    method="posterior", resolution=1.0, result_origin="existing_results"):
     results, source_input = Path(results).resolve(), Path(source_input).resolve()
@@ -347,16 +277,14 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
     las_source = Path(las_source or source_input).resolve()
     if output == work or output in work.parents or work in output.parents:
         raise ValueError("Work and final Output must use separate directories")
-    features, raster = load_features(results, source_input.stem, method, resolution)
-    if not raster.exists():
-        raise FileNotFoundError(raster)
+    features = load_features(results, source_input.stem, method, resolution)
     old_rows = read_existing(output)
     assign_ids(features, old_rows, source_input.stem)
     staging_root = work / "export_staging"
     staging_root.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=source_input.stem + "_", dir=staging_root) as temp:
         staging = Path(temp)
-        for category in ("Result", "Overlay"):
+        for category in ("Result", "Visualiza"):
             for kind in ("SC", "DP"):
                 (staging / category / kind).mkdir(parents=True)
         print("Extracting observed scour points from raw LAS...", flush=True)
@@ -365,12 +293,15 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
         extract_scour(las_source, scour, staging)
         print("Matching original slab points to depression candidates...", flush=True)
         extract_depression(results, depression, staging)
+        print("Sampling surrounding observations for 3D snapshots...", flush=True)
+        collect_context(las_source, scour)
+        collect_context(results / "slab/A_align_filled_slab_zone_open3d_patch_final_final2.las", depression)
         report, new_rows = [], []
         for feature in features:
             original_las = las_source if feature["kind"] == "SC" else results / "slab/A_align_filled_slab_zone_open3d_patch_final_final2.las"
             with laspy.open(original_las) as reader: native_header = reader.header
             report.append(verify_las(feature, staging, native_header))
-            make_overlay(feature, raster, staging)
+            report[-1]["visualization"] = make_visualization(feature, staging)
             center = feature["geometry"].centroid
             new_rows.append(dict(zip(FIELDS, [source_input.stem, feature["id"], feature["source_id"], feature["kind"],
                 "세굴" if feature["kind"] == "SC" else "슬래브 함몰", float(center.x), float(center.y), feature["center_z"],
@@ -378,9 +309,9 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
                 feature["point_count"], feature["selection"], method if feature["kind"] == "SC" else "reference_plane",
                 resolution if feature["kind"] == "SC" else "", result_origin,
                 os.path.relpath(source_input, output / "Result"),
-                f"{feature['kind']}/{feature['id']}.las", f"../Overlay/{feature['kind']}/{feature['id']}.png",
+                f"{feature['kind']}/{feature['id']}.las", f"../Visualiza/{feature['kind']}/{feature['id']}.png",
                 json.dumps(shapely.geometry.mapping(feature["geometry"]), separators=(",", ":"))], strict=True)))
-            print(f"{feature['id']}: {feature['point_count']:,} measured points; PNG verified", flush=True)
+            print(f"{feature['id']}: {feature['point_count']:,} measured points; 3D PNG rendered", flush=True)
         rows = [row for row in old_rows if row["dataset"] != source_input.stem] + new_rows
         for kind in ("SC", "DP"):
             with (staging / "Result" / (kind + "_result.csv")).open("w", encoding="utf-8-sig", newline="") as stream:
@@ -395,7 +326,7 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
         active_ids = {row["damage_id"] for row in new_rows}
         for row in old_rows:
             if row["dataset"] == source_input.stem and row["damage_id"] not in active_ids:
-                for relative in (row["pointcloud_path"], row["overlay_path"]):
+                for relative in (row["pointcloud_path"], row["visualization_path"]):
                     path = (output / "Result" / relative).resolve()
                     if output in path.parents and path.is_file(): path.unlink()
     verification = {"passed": True, "dataset": source_input.stem, "result_origin": result_origin,
