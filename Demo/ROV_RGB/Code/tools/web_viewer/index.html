@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>ROV 균열·박락 결과 뷰어</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1a27'/%3E%3Cpath d='M5 24L10 8h12l5 16' fill='none' stroke='%235ce2d2' stroke-width='3'/%3E%3Ccircle cx='16' cy='19' r='4' fill='%23ffdc30'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="header"><div class="brand"><span class="brand-mark">◈</span><div><h1>대청댐 <span>ROV 균열·박락 결과</span></h1><p>3D 점과 원본 프레임·손상 Overlay 확인</p></div></div>
+<div class="metrics"><span><strong id="total-count">80</strong>손상 관측</span><span><strong>35</strong>원본 프레임</span><span class="crack"><strong>35</strong>균열</span><span class="spall"><strong>45</strong>박락</span></div></header>
+<div class="notice"><strong>시연용 위치</strong> 방류 여수로의 하류 수면 인접 격자와 바로 아래 행에 나눠 배치합니다. 비슷한 프레임은 같은 높이에서 가로로 이어 표시합니다. 실제 촬영 위치와 연결된 좌표가 아니며, 이미지의 손상은 모델 예측입니다.</div>
+<main class="workspace">
+<section class="model-panel" aria-label="댐 3D 모델과 손상 위치">
+<div class="toolbar"><select id="mode" aria-label="표면 표시"><option value="texture">사진 재질</option><option value="regions">구획 색상</option></select>
+<select id="layer" aria-label="모델 구성"><option value="all">전체 부재</option><option value="grid">격자만</option><option value="member">격자 외 부재</option></select>
+<button id="damage-fit">손상 전체</button><button id="fit">모델 전체</button><button id="front">측면</button><button id="top">위에서</button>
+<label><input type="checkbox" id="water">수면</label><label><input type="checkbox" id="land">지형·하상</label>
+<label><input type="checkbox" id="xray" checked>가려진 점 표시</label><button id="save">화면 저장</button></div>
+<div class="viewport"><canvas id="canvas" aria-label="드래그로 회전하고 손상 점을 클릭할 수 있는 3D 모델"></canvas>
+<div class="legend"><span><i class="dot crack-dot"></i>균열 CRC</span><span><i class="dot spall-dot"></i>박락 SPL</span><small>점 또는 목록을 선택하면 이미지가 열립니다.</small></div>
+<div id="selection" class="selection">손상을 선택하세요.</div><div id="status" role="status">모델을 불러오는 중…</div><div id="error" role="alert" hidden></div></div>
+<div class="viewer-bottom">드래그 회전 · 휠 확대 · 오른쪽/Shift 드래그 이동 · 점 클릭</div></section>
+<aside class="sidebar"><section><div class="section-heading"><h2>손상 목록</h2><span id="visible-count">80건</span></div>
+<div class="filters"><select id="class-filter" aria-label="손상 종류"><option value="all">균열·박락 전체</option><option value="CRC">균열 35건</option><option value="SPL">박락 45건</option></select>
+<select id="frame-filter" aria-label="원본 프레임"><option value="all">모든 프레임</option></select>
+<select id="group-filter" aria-label="유사 프레임 묶음"><option value="all">모든 프레임 묶음</option></select></div>
+<div id="location-list" aria-label="손상 목록"></div><div class="navigation"><button id="prev">이전 손상</button><button id="next">다음 손상</button><button id="focus">선택 점 확대</button></div></section>
+<section id="location-detail" class="detail"><p>점 또는 손상 목록을 선택하세요.</p></section>
+<div class="downloads"><a href="result.csv" download>최종 result.csv</a><a href="CRC_result.csv" download>균열 CSV</a><a href="SPL_result.csv" download>박락 CSV</a></div>
+<p class="footnote">물리적 길이·폭·면적은 산출하지 않았습니다. 같은 실제 손상이 여러 프레임에 나타날 수 있습니다.</p></aside></main>
+<script src="viewer.js" defer></script></body></html>
