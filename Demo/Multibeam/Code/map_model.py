@@ -22,7 +22,7 @@ from runtime import CODE, file_hash, write_json
 
 ROOT = CODE.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam/Multibeam_work"
-MAPPING_FIELDS = ["member_name"]
+MAPPING_FIELDS = ["grid_id", "member_name"]
 
 
 def model_path(path=None):
@@ -204,14 +204,14 @@ def map_output(output, model=None, work=None):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="기존 손상 중앙점 → Dam_model 부재명; CSV만 갱신")
+    parser = argparse.ArgumentParser(description="기존 손상 중앙점 → Dam_model 격자 ID·부재명; CSV만 갱신")
     parser.add_argument("--model", type=Path, default=model_path())
     parser.add_argument("--output-dir", type=Path, default=ROOT / "Output")
     parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK)
     args = parser.parse_args()
     report = map_output(args.output_dir, args.model, args.work_dir)
     for row in report["features"]:
-        print(f"{row['damage_id']}: {row.get('member_name') or row['status']}")
+        print(f"{row['damage_id']}: {row.get('grid_id') or row['status']} / {row.get('member_name', '')}")
 
 
 if __name__ == "__main__":

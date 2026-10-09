@@ -1,11 +1,11 @@
 {
   "repo": "Jiwandukong/Dam_Damge_Module",
-  "release": "multibeam-demo-v7",
+  "release": "multibeam-demo-v8",
   "assets": [
     {
       "scope": "raw",
       "name": "multibeam_A_rawdata.zip",
-      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v7/multibeam_A_rawdata.zip",
+      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v8/multibeam_A_rawdata.zip",
       "bytes": 171602238,
       "sha256": "a84cd4972af44e9d25b3b052171689b32dd236e4c45ef8d3175340aff13eb4a4",
       "members": [
@@ -19,9 +19,9 @@
     {
       "scope": "results",
       "name": "multibeam_A_results.zip",
-      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v7/multibeam_A_results.zip",
-      "bytes": 30029399,
-      "sha256": "e69747aa9b5650f327027fdbcd28a9ffa735aaadf1f55dc0424db490e11e6817",
+      "url": "https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v8/multibeam_A_results.zip",
+      "bytes": 30029438,
+      "sha256": "42869bfe9c7043c78ab88014e3136f9e4c6afbf0271bc448c4be9bbb1ae2357f",
       "members": [
         {
           "path": "Output/Result/DP/DP-001.las",
@@ -40,8 +40,8 @@
         },
         {
           "path": "Output/Result/DP_result.csv",
-          "bytes": 6881,
-          "sha256": "679139b0d8e742718b7882f16d181c39892b056621ef8d71e2eaf6309b851ee6"
+          "bytes": 6916,
+          "sha256": "f57456cc04fb80413c0d1048636ea9bf808f7870c2a4eb63cc9ef357422436a4"
         },
         {
           "path": "Output/Result/SC/SC-001.las",
@@ -55,8 +55,8 @@
         },
         {
           "path": "Output/Result/SC_result.csv",
-          "bytes": 7003,
-          "sha256": "1d985ebea566a6e570197464c4694ebb95e9d769b3cf57fe023dc38a7841d7d4"
+          "bytes": 7029,
+          "sha256": "4b1e5e21b14d0966985ce78bf7c31be3ad02735394803e315ec6a0966d0f94cf"
         },
         {
           "path": "Output/Visualize/DP/DP-001.png",
