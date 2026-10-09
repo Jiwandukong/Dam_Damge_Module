@@ -10,7 +10,7 @@ from datetime import datetime
 import json
 import shutil
 from demo_mapping import MEMBER_COLUMNS, POSITION_COLUMNS, SpillwayWaterlineGridSampler
-from result_export import write_results
+from result_export import REMOVED_COLUMNS, write_results
 from paths import ROOT, WORK, read_json, write_json, sha
 
 
@@ -35,7 +35,7 @@ def main():
         with path.open(encoding='utf-8-sig', newline='') as handle:
             reader = csv.DictReader(handle); fields = list(reader.fieldnames); rows = list(reader)
         for field in POSITION_COLUMNS+MEMBER_COLUMNS:
-            if field not in fields:
+            if field not in REMOVED_COLUMNS and field not in fields:
                 fields.append(field)
         assert len(rows) == summary['counts'][kind]
         for row in rows:
@@ -69,7 +69,8 @@ def main():
         backup=str(backup), eligible_grid_ids=sampler.eligible_grid_ids,
         frame_group_count=len(sampler.frame_groups),
         multi_frame_group_count=sum(len(g['images']) > 1 for g in sampler.frame_groups),
-        frame_step_m=sampler.frame_step, changed_columns=sorted(position_fields),
+        frame_step_m=sampler.frame_step,
+        changed_columns=sorted(position_fields.intersection(summary['final_result']['columns'])),
         non_position_csv_fields_unchanged=True, source_images_and_overlays_unchanged=True,
         before_csv_sha256=before_hashes, after_csv_sha256={k: sha(p) for k, p, _, _ in tables})
     write_json(args.work_dir/'Reports/spillway_frame_remap.json', report)

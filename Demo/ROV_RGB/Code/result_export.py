@@ -5,7 +5,13 @@ from pathlib import Path
 from demo_mapping import MEMBER_COLUMNS, POSITION_COLUMNS
 from paths import sha
 
-RESULT_COLUMNS = [
+REMOVED_COLUMNS = frozenset({
+    'mapping_status', 'measurement_status', 'frame_group_id', 'frame_group_index',
+    'frame_group_size', 'frame_offset_x_m', 'member_id', 'member_node_id',
+    'position_origin', 'grid_guid',
+})
+
+RESULT_COLUMNS = [name for name in [
     'image', 'damage_id', 'damage_type', 'damage_name_ko', 'pixel_nodes_json',
     'world_center_x_m', 'world_center_y_m', 'world_center_z_m', 'length_px', 'length_m',
     'width_px', 'width_m', 'area_m2', 'area_px', 'member_name', 'section_name',
@@ -13,7 +19,7 @@ RESULT_COLUMNS = [
     'mapping_status', 'measurement_status', 'pixel_center_x_px', 'pixel_center_y_px',
     'bbox_px_json', 'crop_origin_x_px', 'crop_origin_y_px', 'crop_size_px',
     'overlay_padding_px_json', 'result_origin',
-] + POSITION_COLUMNS + MEMBER_COLUMNS
+] + POSITION_COLUMNS + MEMBER_COLUMNS if name not in REMOVED_COLUMNS]
 
 
 def read_class_results(folder):
@@ -36,20 +42,22 @@ def read_class_results(folder):
 
 
 def write_results(output, rows, columns=RESULT_COLUMNS):
+    columns = [name for name in columns if name not in REMOVED_COLUMNS]
     rows = sorted(rows, key=lambda r: r['damage_id'])
     if len({r['damage_id'] for r in rows}) != len(rows):
         raise ValueError('Duplicate damage IDs in final results')
     if any(r['damage_type'] not in {'CRC', 'SPL'} for r in rows):
         raise ValueError('Unexpected damage class in final results')
-    if len(columns) != len(set(columns)) or not set(MEMBER_COLUMNS).issubset(columns):
-        raise ValueError('Result schema needs distinct columns including member IDs')
-    if any(set(r)-set(columns) for r in rows):
+    required = {'image', 'damage_id', 'damage_type', 'member_name', 'grid_id'}
+    if len(columns) != len(set(columns)) or not required.issubset(columns):
+        raise ValueError('Result schema needs distinct columns including member names and grid IDs')
+    if any(set(r)-set(columns)-REMOVED_COLUMNS for r in rows):
         raise ValueError('Result schema would discard existing fields')
     for row in rows:
         if row.get('mapping_status')=='demo_random' and any(
                 row.get(k) is None or str(row.get(k,''))==''
-                for k in ['grid_id','grid_guid','member_id','member_node_id']):
-            raise ValueError('Demo result needs grid and member IDs: '+row['damage_id'])
+                for k in ['grid_id','member_name']):
+            raise ValueError('Demo result needs grid IDs and a member name: '+row['damage_id'])
     folder = Path(output)/'Result'
     folder.mkdir(parents=True, exist_ok=True)
     exports = {f'{kind}_result.csv': [r for r in rows if r['damage_type']==kind]
@@ -58,7 +66,8 @@ def write_results(output, rows, columns=RESULT_COLUMNS):
         temporary = folder/(name+'.new')
         with temporary.open('w', encoding='utf-8-sig', newline='') as handle:
             writer = csv.DictWriter(handle, fieldnames=columns)
-            writer.writeheader(); writer.writerows(selected)
+            writer.writeheader()
+            writer.writerows({name: row.get(name, '') for name in columns} for row in selected)
     for name in exports:
         (folder/(name+'.new')).replace(folder/name)
     (folder/'result.csv').unlink(missing_ok=True)
