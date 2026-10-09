@@ -1,0 +1,13 @@
+# Preserve delivered bytes so SHA256SUMS remains valid after checkout.
+* -text
+*.DZT binary
+*.DZX -text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.npz binary
+*.pt binary
+*.csv -text
+*.py -text
+*.md -text
+*.json -text

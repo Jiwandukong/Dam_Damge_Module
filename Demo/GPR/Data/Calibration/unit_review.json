@@ -1,0 +1,1426 @@
+{
+  "calibration_status": "selected_anchor_fit",
+  "scale": 1.0,
+  "legacy_scale": 0.08269295608830796,
+  "distance_source": "DZT scans-per-metre; N traces have N-1 intervals",
+  "csv_sha256": "27be3ab4544c3ec1e267202c4bf7ca8436c46d190201b2bd896c94ed69de5683",
+  "candidate_count": 126,
+  "scan_count": 48,
+  "max_pairwise_distance_error_m": 6.081357639686757e-11,
+  "pairwise_error_reference": "Endpoint-interpolated layout; fixed metre vertical stations",
+  "max_world_vs_measured_pairwise_distance_change_m": 0.24641215373807768,
+  "horizontal_distance_scale": 0.9904004109628168,
+  "vertical_station_spacing_preserved": true,
+  "max_vertical_station_spacing_error_m": 4.929567865019635e-11,
+  "model_anchors_applied": true,
+  "reference_anchor_residuals_m": [
+    0.0,
+    0.0
+  ],
+  "horizontal_z_locked": true,
+  "max_horizontal_endpoint_delta_z_m": 0.0,
+  "absolute_placement_verified": false,
+  "depth_converted": false,
+  "assumed_origin_world_xyz": [
+    243027.72157758917,
+    431263.943699504,
+    66.83210681095052
+  ],
+  "dzx_inconsistent_distance_fields": [
+    "Data/processed data/2.6GHz/2600_LINE_001.DZT"
+  ],
+  "scans": [
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_001.DZT",
+      "freq_mhz": 1600,
+      "line_no": 1,
+      "n_traces": 7553,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 25.170816354118234,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 24.929186861383986,
+      "start_world_xyz": [
+        243027.72157758917,
+        431263.943699504,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243035.56743484063,
+        431240.28134793957,
+        66.83210681095052
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.24162949273424772,
+      "dzx_declared_distance_m": 25.1708164,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_002.DZT",
+      "freq_mhz": 1600,
+      "line_no": 2,
+      "n_traces": 7750,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 25.827417363355696,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 25.57948477078511,
+      "start_world_xyz": [
+        243027.2658689075,
+        431263.79259764694,
+        66.19218663917381
+      ],
+      "end_world_xyz": [
+        243035.31639166197,
+        431239.5129945917,
+        66.19218663917381
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2479325925705851,
+      "dzx_declared_distance_m": 25.8274174,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_003.DZT",
+      "freq_mhz": 1600,
+      "line_no": 3,
+      "n_traces": 7776,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 25.914075364574853,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 25.665310890837375,
+      "start_world_xyz": [
+        243027.03801456667,
+        431263.7170467184,
+        65.87222655328546
+      ],
+      "end_world_xyz": [
+        243035.11554901188,
+        431239.3559789994,
+        65.87222655328546
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.24876447373747723,
+      "dzx_declared_distance_m": 25.9140754,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_004.DZT",
+      "freq_mhz": 1600,
+      "line_no": 4,
+      "n_traces": 553,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.8398160258836422,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.839816025874932,
+      "start_world_xyz": [
+        243028.03630334797,
+        431262.9945168573,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243026.9882781784,
+        431262.6470173346,
+        65.36043757679927
+      ],
+      "endpoint_delta_z_m": -1.4716692341512498,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -8.710143717394203e-12,
+      "dzx_declared_distance_m": 1.839816,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_005.DZT",
+      "freq_mhz": 1600,
+      "line_no": 5,
+      "n_traces": 538,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.7898210251802824,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.7898210251799143,
+      "start_world_xyz": [
+        243028.98048062442,
+        431260.14696891734,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.96093439969,
+        431259.8089123164,
+        65.40042858859687
+      ],
+      "endpoint_delta_z_m": -1.4316782223536535,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -3.681499549657019e-13,
+      "dzx_declared_distance_m": 1.789821,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_006.DZT",
+      "freq_mhz": 1600,
+      "line_no": 6,
+      "n_traces": 570,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.8964770266807833,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.8964770266838806,
+      "start_world_xyz": [
+        243029.45256926262,
+        431258.72319494735,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243028.3722679556,
+        431258.3649934465,
+        65.31511443009535
+      ],
+      "endpoint_delta_z_m": -1.5169923808551715,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 3.0973001940992617e-12,
+      "dzx_declared_distance_m": 1.896477,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_007.DZT",
+      "freq_mhz": 1600,
+      "line_no": 7,
+      "n_traces": 617,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 2.053128028884644,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 2.0531280288828646,
+      "start_world_xyz": [
+        243030.55410941844,
+        431255.40105568396,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243029.3845740843,
+        431255.01326636143,
+        65.18980925979623
+      ],
+      "endpoint_delta_z_m": -1.6422975511542859,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.779465463869201e-12,
+      "dzx_declared_distance_m": 2.053128,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_008.DZT",
+      "freq_mhz": 1600,
+      "line_no": 8,
+      "n_traces": 561,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.8664800262587675,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.8664800262757422,
+      "start_world_xyz": [
+        243031.4982866949,
+        431252.553507744,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243030.43507275474,
+        431252.20097199624,
+        65.3391090371739
+      ],
+      "endpoint_delta_z_m": -1.4929977737766222,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.697464391270387e-11,
+      "dzx_declared_distance_m": 1.86648,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_009.DZT",
+      "freq_mhz": 1600,
+      "line_no": 9,
+      "n_traces": 608,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 2.0231310284626285,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 2.023131028474726,
+      "start_world_xyz": [
+        243032.44246397133,
+        431249.70595980395,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243031.29001600406,
+        431249.3238362345,
+        65.21380386687478
+      ],
+      "endpoint_delta_z_m": -1.6183029440757366,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.2097434165525556e-11,
+      "dzx_declared_distance_m": 2.023131,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_010.DZT",
+      "freq_mhz": 1600,
+      "line_no": 10,
+      "n_traces": 594,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.9764690278061592,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.9764690278036154,
+      "start_world_xyz": [
+        243033.38664124775,
+        431246.8584118639,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243032.260773629,
+        431246.4851016882,
+        65.2511288112192
+      ],
+      "endpoint_delta_z_m": -1.5809779997313171,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -2.5437429940211587e-12,
+      "dzx_declared_distance_m": 1.976469,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_011.DZT",
+      "freq_mhz": 1600,
+      "line_no": 11,
+      "n_traces": 601,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.9998000281343937,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.9998000281363786,
+      "start_world_xyz": [
+        243034.33081852418,
+        431244.01086392393,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243033.1916607312,
+        431243.6331470513,
+        65.232466339047
+      ],
+      "endpoint_delta_z_m": -1.5996404719035269,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.984856723424855e-12,
+      "dzx_declared_distance_m": 1.9998,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/1.6GHz/1600_LINE_012.DZT",
+      "freq_mhz": 1600,
+      "line_no": 12,
+      "n_traces": 575,
+      "n_samples": 512,
+      "scans_per_metre": 300.0299987792969,
+      "dx_m": 0.0033330000468906563,
+      "total_distance_m": 1.9131420269152366,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.003333,
+      "model_line_length_m": 1.9131420269136954,
+      "start_world_xyz": [
+        243035.5897215594,
+        431240.21413333726,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243034.49992727078,
+        431239.8527841958,
+        65.30178409282948
+      ],
+      "endpoint_delta_z_m": -1.5303227181210417,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.5412116027846423e-12,
+      "dzx_declared_distance_m": 1.913142,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_001.DZT",
+      "freq_mhz": 2600,
+      "line_no": 1,
+      "n_traces": 10614,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 26.5325,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 26.277798903881234,
+      "start_world_xyz": [
+        243027.72157758917,
+        431263.943699504,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243035.99187778903,
+        431239.00126879173,
+        66.83210681095052
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.25470109611876524,
+      "dzx_declared_distance_m": 0.265325,
+      "dzx_distance_field_consistent": false
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_002.DZT",
+      "freq_mhz": 2600,
+      "line_no": 2,
+      "n_traces": 10611,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 26.525,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 26.270370900802362,
+      "start_world_xyz": [
+        243027.2658689075,
+        431263.79259764694,
+        66.19218663917381
+      ],
+      "end_world_xyz": [
+        243035.53383132347,
+        431238.8572174663,
+        66.19218663917381
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2546290991976363,
+      "dzx_declared_distance_m": 26.525000000000002,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_003.DZT",
+      "freq_mhz": 2600,
+      "line_no": 3,
+      "n_traces": 10617,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 26.54,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 26.285226906969267,
+      "start_world_xyz": [
+        243027.03801456667,
+        431263.7170467184,
+        65.87222655328546
+      ],
+      "end_world_xyz": [
+        243035.31065255046,
+        431238.7675654745,
+        65.87222655328546
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2547730930307317,
+      "dzx_declared_distance_m": 26.54,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_004.DZT",
+      "freq_mhz": 2600,
+      "line_no": 4,
+      "n_traces": 782,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 1.9525,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 1.952499999991674,
+      "start_world_xyz": [
+        243028.03630334797,
+        431262.9945168573,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243026.9240893468,
+        431262.62573388737,
+        65.270301641708
+      ],
+      "endpoint_delta_z_m": -1.5618051692425183,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -8.326006550873899e-12,
+      "dzx_declared_distance_m": 1.9525000000000001,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_005.DZT",
+      "freq_mhz": 2600,
+      "line_no": 5,
+      "n_traces": 728,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 1.8175,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 1.817500000012353,
+      "start_world_xyz": [
+        243028.98048062442,
+        431260.14696891734,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.94516746327,
+        431259.8036843857,
+        65.37828817069531
+      ],
+      "endpoint_delta_z_m": -1.4538186402552071,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.2353007505794267e-11,
+      "dzx_declared_distance_m": 1.8175000000000001,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_006.DZT",
+      "freq_mhz": 2600,
+      "line_no": 6,
+      "n_traces": 766,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 1.9125,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 1.9125000000131118,
+      "start_world_xyz": [
+        243029.45256926262,
+        431258.72319494735,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243028.36314069552,
+        431258.3619670702,
+        65.30229765029684
+      ],
+      "endpoint_delta_z_m": -1.5298091606536843,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.3111733920823099e-11,
+      "dzx_declared_distance_m": 1.9125,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_007.DZT",
+      "freq_mhz": 2600,
+      "line_no": 7,
+      "n_traces": 845,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.11,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.110000000003389,
+      "start_world_xyz": [
+        243030.55410941844,
+        431255.40105568396,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243029.35217777058,
+        431255.00252453587,
+        65.14431735788946
+      ],
+      "endpoint_delta_z_m": -1.6877894530610575,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 3.389288849575678e-12,
+      "dzx_declared_distance_m": 2.11,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_008.DZT",
+      "freq_mhz": 2600,
+      "line_no": 8,
+      "n_traces": 801,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.0,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.0000000000141407,
+      "start_world_xyz": [
+        243031.4982866949,
+        431252.553507744,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243030.35901499074,
+        431252.17575310124,
+        65.23230638150875
+      ],
+      "endpoint_delta_z_m": -1.5998004294417711,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.4140688620045694e-11,
+      "dzx_declared_distance_m": 2.0,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_009.DZT",
+      "freq_mhz": 2600,
+      "line_no": 9,
+      "n_traces": 836,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.0875,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.0874999999985793,
+      "start_world_xyz": [
+        243032.44246397133,
+        431249.70595980395,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243031.25334913013,
+        431249.3116783956,
+        65.16231511272068
+      ],
+      "endpoint_delta_z_m": -1.6697916982298437,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.4206413823103503e-12,
+      "dzx_declared_distance_m": 2.0875,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_010.DZT",
+      "freq_mhz": 2600,
+      "line_no": 10,
+      "n_traces": 851,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.125,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.1249999999974745,
+      "start_world_xyz": [
+        243033.38664124775,
+        431246.8584118639,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243032.1761650621,
+        431246.45704755606,
+        65.13231885466864
+      ],
+      "endpoint_delta_z_m": -1.699787956281881,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -2.525535336417306e-12,
+      "dzx_declared_distance_m": 2.125,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_011.DZT",
+      "freq_mhz": 2600,
+      "line_no": 11,
+      "n_traces": 824,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.0575,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.0575000000050103,
+      "start_world_xyz": [
+        243034.33081852418,
+        431244.01086392393,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243033.15879275854,
+        431243.6222488352,
+        65.18631211916231
+      ],
+      "endpoint_delta_z_m": -1.6457946917882111,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 5.0102144655284064e-12,
+      "dzx_declared_distance_m": 2.0575,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/2.6GHz/2600_LINE_012.DZT",
+      "freq_mhz": 2600,
+      "line_no": 12,
+      "n_traces": 814,
+      "n_samples": 512,
+      "scans_per_metre": 400.0,
+      "dx_m": 0.0025,
+      "total_distance_m": 2.0325,
+      "start_m": -0.8299999833106995,
+      "dzx_display_unit": "cm",
+      "dzx_spacing_m": 0.0025,
+      "model_line_length_m": 2.032499999987365,
+      "start_world_xyz": [
+        243035.5897215594,
+        431240.21413333726,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243034.4319366901,
+        431239.8302401816,
+        65.20630962453033
+      ],
+      "endpoint_delta_z_m": -1.6257971864201863,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.2635226198653982e-11,
+      "dzx_declared_distance_m": 2.0325,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_001.DZT",
+      "freq_mhz": 400,
+      "line_no": 1,
+      "n_traces": 2934,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 26.663902671258036,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 26.407940163486508,
+      "start_world_xyz": [
+        243027.72157758917,
+        431263.943699504,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243036.03283659572,
+        431238.8777409665,
+        66.83210681095052
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2559625077715282,
+      "dzx_declared_distance_m": 26.6639027,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_002.DZT",
+      "freq_mhz": 400,
+      "line_no": 2,
+      "n_traces": 2954,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 26.845722669016357,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 26.588014764034714,
+      "start_world_xyz": [
+        243027.2658689075,
+        431263.79259764694,
+        66.19218663917381
+      ],
+      "end_world_xyz": [
+        243035.63380202936,
+        431238.5557154235,
+        66.19218663917381
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2577079049816433,
+      "dzx_declared_distance_m": 26.8457227,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_003.DZT",
+      "freq_mhz": 400,
+      "line_no": 3,
+      "n_traces": 2948,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 26.791176669688863,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 26.53399238384446,
+      "start_world_xyz": [
+        243027.03801456667,
+        431263.7170467184,
+        65.87222655328546
+      ],
+      "end_world_xyz": [
+        243035.38894545395,
+        431238.53144160076,
+        65.87222655328546
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.2571842858444029,
+      "dzx_declared_distance_m": 26.7911767,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_004.DZT",
+      "freq_mhz": 400,
+      "line_no": 4,
+      "n_traces": 196,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.772744978143647,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.7727449781363755,
+      "start_world_xyz": [
+        243028.03630334797,
+        431262.9945168573,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.02648425184,
+        431262.6596855344,
+        65.41408772228806
+      ],
+      "endpoint_delta_z_m": -1.4180190886624615,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -7.271516722084925e-12,
+      "dzx_declared_distance_m": 1.772745,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_005.DZT",
+      "freq_mhz": 400,
+      "line_no": 5,
+      "n_traces": 207,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.8727459769107246,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.872745976918788,
+      "start_world_xyz": [
+        243028.98048062442,
+        431260.14696891734,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.91369737414,
+        431259.7932496736,
+        65.33409690190196
+      ],
+      "endpoint_delta_z_m": -1.4980099090485623,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 8.063327783247587e-12,
+      "dzx_declared_distance_m": 1.872746,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_006.DZT",
+      "freq_mhz": 400,
+      "line_no": 6,
+      "n_traces": 205,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.8545639771348923,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.8545639771396558,
+      "start_world_xyz": [
+        243029.45256926262,
+        431258.72319494735,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243028.39614313128,
+        431258.37290987105,
+        65.34864068742671
+      ],
+      "endpoint_delta_z_m": -1.4834661235238116,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 4.763522909456697e-12,
+      "dzx_declared_distance_m": 1.854564,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_007.DZT",
+      "freq_mhz": 400,
+      "line_no": 7,
+      "n_traces": 214,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.9363829761261375,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.9363829761153633,
+      "start_world_xyz": [
+        243030.55410941844,
+        431255.40105568396,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243029.45107625192,
+        431255.0353168543,
+        65.28319365256536
+      ],
+      "endpoint_delta_z_m": -1.5489131583851616,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.0774270364777294e-11,
+      "dzx_declared_distance_m": 1.936383,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_008.DZT",
+      "freq_mhz": 400,
+      "line_no": 8,
+      "n_traces": 218,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.9727469756778022,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.9727469756901952,
+      "start_world_xyz": [
+        243031.4982866949,
+        431252.553507744,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243030.37453929047,
+        431252.1809005795,
+        65.25410608151587
+      ],
+      "endpoint_delta_z_m": -1.578000729434649,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.2392975534680772e-11,
+      "dzx_declared_distance_m": 1.972747,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_009.DZT",
+      "freq_mhz": 400,
+      "line_no": 9,
+      "n_traces": 246,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.227294972539454,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.227294972537226,
+      "start_world_xyz": [
+        243032.44246397133,
+        431249.70595980395,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243031.17371690183,
+        431249.28527429566,
+        65.05049308416947
+      ],
+      "endpoint_delta_z_m": -1.7816137267810461,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -2.227995565817764e-12,
+      "dzx_declared_distance_m": 2.227295,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_010.DZT",
+      "freq_mhz": 400,
+      "line_no": 10,
+      "n_traces": 222,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.0091109752294667,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.0091109752318697,
+      "start_world_xyz": [
+        243033.38664124775,
+        431246.8584118639,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243032.24217960547,
+        431246.4789363646,
+        65.22501851046638
+      ],
+      "endpoint_delta_z_m": -1.6070883004841363,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 2.402966714498689e-12,
+      "dzx_declared_distance_m": 2.009111,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_011.DZT",
+      "freq_mhz": 400,
+      "line_no": 11,
+      "n_traces": 225,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.0363839748932153,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.0363839748977646,
+      "start_world_xyz": [
+        243034.33081852418,
+        431244.01086392393,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243033.1708212035,
+        431243.62623717345,
+        65.20320283217927
+      ],
+      "endpoint_delta_z_m": -1.6289039787712483,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 4.5492498657040414e-12,
+      "dzx_declared_distance_m": 2.036384,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/400MHz/400_LINE_012.DZT",
+      "freq_mhz": 400,
+      "line_no": 12,
+      "n_traces": 224,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.027292975005299,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.027292974994412,
+      "start_world_xyz": [
+        243035.5897215594,
+        431240.21413333726,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243034.4349027982,
+        431239.8312236705,
+        65.21047472494165
+      ],
+      "endpoint_delta_z_m": -1.6216320860088729,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.0886846979474285e-11,
+      "dzx_declared_distance_m": 2.027293,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_001.DZT",
+      "freq_mhz": 900,
+      "line_no": 1,
+      "n_traces": 2830,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 25.71843868291476,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 25.47155224088249,
+      "start_world_xyz": [
+        243027.72157758917,
+        431263.943699504,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243035.73813119624,
+        431239.7665441332,
+        66.83210681095052
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.24688644203226673,
+      "dzx_declared_distance_m": 25.7184387,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_002.DZT",
+      "freq_mhz": 900,
+      "line_no": 2,
+      "n_traces": 2852,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 25.918440680448914,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 25.669634301454227,
+      "start_world_xyz": [
+        243027.2658689075,
+        431263.79259764694,
+        66.19218663917381
+      ],
+      "end_world_xyz": [
+        243035.3447640414,
+        431239.4274262216,
+        66.19218663917381
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.24880637899468638,
+      "dzx_declared_distance_m": 25.9184407,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_003.DZT",
+      "freq_mhz": 900,
+      "line_no": 3,
+      "n_traces": 2852,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 25.918440680448914,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 25.669634301454227,
+      "start_world_xyz": [
+        243027.03801456667,
+        431263.7170467184,
+        65.87222655328546
+      ],
+      "end_world_xyz": [
+        243035.11690970056,
+        431239.35187529307,
+        65.87222655328546
+      ],
+      "endpoint_delta_z_m": 0.0,
+      "horizontal_endpoint_ratio": 0.9904004109628168,
+      "model_minus_measured_length_m": -0.24880637899468638,
+      "dzx_declared_distance_m": 25.9184407,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_004.DZT",
+      "freq_mhz": 900,
+      "line_no": 4,
+      "n_traces": 184,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.6636529794886534,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.6636529794892,
+      "start_world_xyz": [
+        243028.03630334797,
+        431262.9945168573,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.08862696544,
+        431262.6802905389,
+        65.5013504354365
+      ],
+      "endpoint_delta_z_m": -1.3307563755140137,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 5.466738173254271e-13,
+      "dzx_declared_distance_m": 1.663653,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_005.DZT",
+      "freq_mhz": 900,
+      "line_no": 5,
+      "n_traces": 205,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.8545639771348923,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.8545639771396558,
+      "start_world_xyz": [
+        243028.98048062442,
+        431260.14696891734,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243027.92405449308,
+        431259.79668384104,
+        65.34864068742671
+      ],
+      "endpoint_delta_z_m": -1.4834661235238116,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 4.763522909456697e-12,
+      "dzx_declared_distance_m": 1.854564,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_006.DZT",
+      "freq_mhz": 900,
+      "line_no": 6,
+      "n_traces": 207,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.8727459769107246,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.872745976918788,
+      "start_world_xyz": [
+        243029.45256926262,
+        431258.72319494735,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243028.38578601234,
+        431258.3694757036,
+        65.33409690190196
+      ],
+      "endpoint_delta_z_m": -1.4980099090485623,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 8.063327783247587e-12,
+      "dzx_declared_distance_m": 1.872746,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_007.DZT",
+      "freq_mhz": 900,
+      "line_no": 7,
+      "n_traces": 217,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.963655975789886,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.963655975770264,
+      "start_world_xyz": [
+        243030.55410941844,
+        431255.40105568396,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243029.43554057353,
+        431255.0301656032,
+        65.26137797427825
+      ],
+      "endpoint_delta_z_m": -1.5707288366722736,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -1.9621859692620092e-11,
+      "dzx_declared_distance_m": 1.963656,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_008.DZT",
+      "freq_mhz": 900,
+      "line_no": 8,
+      "n_traces": 208,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.8818369767986407,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.8818369768221292,
+      "start_world_xyz": [
+        243031.4982866949,
+        431252.553507744,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243030.42632488513,
+        431252.1980714165,
+        65.3268250091396
+      ],
+      "endpoint_delta_z_m": -1.5052818018109235,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 2.3488544442784587e-11,
+      "dzx_declared_distance_m": 1.881837,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_009.DZT",
+      "freq_mhz": 900,
+      "line_no": 9,
+      "n_traces": 220,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.9909289754536346,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.9909289754527375,
+      "start_world_xyz": [
+        243032.44246397133,
+        431249.70595980395,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243031.30835944798,
+        431249.32991847204,
+        65.23956229599113
+      ],
+      "endpoint_delta_z_m": -1.5925445149593855,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -8.970602038971265e-13,
+      "dzx_declared_distance_m": 1.990929,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_010.DZT",
+      "freq_mhz": 900,
+      "line_no": 10,
+      "n_traces": 221,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.0000199753415506,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.000019975345096,
+      "start_world_xyz": [
+        243033.38664124775,
+        431246.8584118639,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243032.24735816492,
+        431246.4806534483,
+        65.23229040322876
+      ],
+      "endpoint_delta_z_m": -1.599816407721761,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 3.54516416223305e-12,
+      "dzx_declared_distance_m": 2.00002,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_011.DZT",
+      "freq_mhz": 900,
+      "line_no": 11,
+      "n_traces": 218,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 1.9727469756778022,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 1.9727469756736165,
+      "start_world_xyz": [
+        243034.33081852418,
+        431244.01086392393,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243033.20707111977,
+        431243.63825675944,
+        65.25410608151587
+      ],
+      "endpoint_delta_z_m": -1.578000729434649,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": -4.185762847441765e-12,
+      "dzx_declared_distance_m": 1.972747,
+      "dzx_distance_field_consistent": true
+    },
+    {
+      "source": "Data/processed data/900MHz/900_LINE_012.DZT",
+      "freq_mhz": 900,
+      "line_no": 12,
+      "n_traces": 223,
+      "n_samples": 512,
+      "scans_per_metre": 109.9989013671875,
+      "dx_m": 0.009090999887916139,
+      "total_distance_m": 2.0182019751173828,
+      "start_m": 0.0,
+      "dzx_display_unit": "m",
+      "dzx_spacing_m": 0.009091,
+      "model_line_length_m": 2.0182019751186324,
+      "start_world_xyz": [
+        243035.5897215594,
+        431240.21413333726,
+        66.83210681095052
+      ],
+      "end_world_xyz": [
+        243034.44008135766,
+        431239.8329407542,
+        65.21774661770402
+      ],
+      "endpoint_delta_z_m": -1.6143601932464975,
+      "horizontal_endpoint_ratio": 1.0,
+      "model_minus_measured_length_m": 1.2496670365180762e-12,
+      "dzx_declared_distance_m": 2.018202,
+      "dzx_distance_field_consistent": true
+    }
+  ]
+}

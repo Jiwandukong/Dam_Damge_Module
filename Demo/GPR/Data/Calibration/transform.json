@@ -1,0 +1,112 @@
+{
+  "scale": 1.0,
+  "R": [
+    [
+      0.3147257588098165,
+      -0.5696358520703966,
+      0.759251402881561
+    ],
+    [
+      -0.9491826466711163,
+      -0.18887732136368332,
+      0.25174920205016477
+    ],
+    [
+      0.0,
+      -0.799900214720882,
+      -0.6001330239950863
+    ]
+  ],
+  "t": [
+    243027.72157758917,
+    431263.943699504,
+    66.83210681095052
+  ],
+  "y0": 0.0,
+  "provenance": "User-selected model endpoints applied. Horizontal along-scan distances use an explicit endpoint interpolation ratio; vertical station spacing and vertical scan distances stay in metres. World Z is constant along horizontal lines. Field survey/CRS accuracy is not established by model picks.",
+  "legacy_scale": 0.08269295608830796,
+  "calibration_status": "selected_anchor_fit",
+  "plane_units": "m",
+  "world_units": "m",
+  "anchor_plane_xy_m": [
+    0.0,
+    0.0
+  ],
+  "horizontal_z_locked": true,
+  "mesh_alignment": {
+    "model_sha256": "4096486bd10baa62e51988e0424eb66b1191b58dcc58a410b97a6e5d03edb4f7",
+    "reference_grids": [
+      "NOF_R_0157",
+      "NOF_R_0158",
+      "NOF_R_0159",
+      "NOF_R_0160",
+      "NOF_R_0161",
+      "NOF_R_0162",
+      "NOF_R_0163"
+    ],
+    "reference_normal_world": [
+      0.7592787676744968,
+      0.25166665203240923,
+      -0.6001330262645905
+    ],
+    "horizontal_direction_world": [
+      0.3146225590849973,
+      -0.949216858949949,
+      0.0
+    ],
+    "method": "Area-weighted triangle normal; horizontal tangent is normal cross world Z",
+    "max_triangle_horizontal_tangent_angle_deg": 0.07462130752371758,
+    "absolute_origin_verified": false
+  },
+  "selected_anchors": {
+    "model_sha256": "4096486bd10baa62e51988e0424eb66b1191b58dcc58a410b97a6e5d03edb4f7",
+    "reference_frequency_mhz": 400,
+    "reference_line_no": 1,
+    "measured_length_m": 26.663902671258036,
+    "horizontal_z_locked": true,
+    "start": {
+      "mesh": "NOF_R_0157",
+      "world_xyz": [
+        243027.72157758917,
+        431263.943699504,
+        66.83210681095052
+      ],
+      "normal_world": [
+        -0.7613317743833918,
+        -0.2510962590796064,
+        0.5977663406302358
+      ],
+      "triangle_index": 0
+    },
+    "end": {
+      "mesh": "NOF_R_0162",
+      "world_xyz": [
+        243036.03283659572,
+        431238.8777409665,
+        66.83210681095052
+      ],
+      "normal_world": [
+        -0.7575899509827654,
+        -0.25243418005758067,
+        0.6019422322022172
+      ],
+      "triangle_index": 0,
+      "raw_world_xyz": [
+        243036.33130668136,
+        431238.977193251,
+        67.24946096887398
+      ],
+      "horizontal_z_locked": true
+    }
+  },
+  "selected_anchor_distance_m": 26.407940163486508,
+  "reference_measured_length_m": 26.663902671258036,
+  "endpoint_residual_m": 0.0,
+  "selected_mesh_direction_angle_deg": 0.006229361762934202,
+  "horizontal_distance_scale": 0.9904004109628168,
+  "selected_minus_measured_length_m": -0.2559625077715282,
+  "vertical_station_spacing_preserved": true,
+  "model_anchors_applied": true,
+  "field_absolute_placement_verified": false,
+  "transverse_axis_verified": false
+}

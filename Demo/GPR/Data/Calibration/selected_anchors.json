@@ -1,0 +1,41 @@
+{
+  "model_sha256": "4096486bd10baa62e51988e0424eb66b1191b58dcc58a410b97a6e5d03edb4f7",
+  "reference_frequency_mhz": 400,
+  "reference_line_no": 1,
+  "measured_length_m": 26.663902671258036,
+  "horizontal_z_locked": true,
+  "start": {
+    "mesh": "NOF_R_0157",
+    "world_xyz": [
+      243027.72157758917,
+      431263.943699504,
+      66.83210681095052
+    ],
+    "normal_world": [
+      -0.7613317743833918,
+      -0.2510962590796064,
+      0.5977663406302358
+    ],
+    "triangle_index": 0
+  },
+  "end": {
+    "mesh": "NOF_R_0162",
+    "world_xyz": [
+      243036.03283659572,
+      431238.8777409665,
+      66.83210681095052
+    ],
+    "normal_world": [
+      -0.7575899509827654,
+      -0.25243418005758067,
+      0.6019422322022172
+    ],
+    "triangle_index": 0,
+    "raw_world_xyz": [
+      243036.33130668136,
+      431238.977193251,
+      67.24946096887398
+    ],
+    "horizontal_z_locked": true
+  }
+}
