@@ -1,6 +1,6 @@
 # Multibeam 손상 탐지 산출물
 
-대청댐 A 멀티빔 원본 점군에서 검출된 **세굴(SC) 2개, 슬래브 함몰(DP) 4개**를 손상별 LAS 점군·Visualiza 3D PNG·CSV로 정리했습니다. 기존 CUBE, 세굴 검출, 슬래브 추출, 함몰 검출 알고리즘과 원본 손상 수치를 유지했습니다. 현재 산출물은 기존 A 분석 결과에서 추출한 결과이며, 재계산 결과와 CSV의 `result_origin`으로 구분합니다.
+대청댐 A 멀티빔 원본 점군에서 검출된 **세굴(SC) 2개, 슬래브 함몰(DP) 4개**를 손상별 LAS 점군·Visualiza 3D PNG·CSV로 정리했습니다. 기존 CUBE, 세굴 검출, 슬래브 추출, 함몰 검출 알고리즘과 원본 손상 수치를 유지했습니다. 현재 산출물은 기존 A 분석 결과에서 추출한 결과입니다.
 
 ## 폴더 구성
 
@@ -40,7 +40,7 @@ Multibeam/
 
 각 손상은 **LAS 1개와 PNG 1개**에 대응합니다. PNG는 1800×1050의 단일 3D 점군 스냅샷이며, XYZ 실제 축척(1:1:1)을 사용합니다. 글자·범례·축·눈금·격자·중앙점 마커 없이 점군 형상만 표시합니다.
 
-이미지에는 점 수 제한만 적용하며, LAS의 관측 XYZ·점 속성·전체 점 수는 유지합니다. 주변 관측점은 회색으로 표시합니다. 세굴의 색은 실제 표고, 함몰의 색은 해당 관측점의 `depression_depth_m`입니다. 점별 함몰 깊이와 CSV의 격자 패치 깊이는 원본 계산 대상이 다르므로 값이 다를 수 있습니다.
+손상점과 주변 회색 점의 표시 크기는 모두 `s=1`(pt²)입니다. 이미지에는 점 수 제한만 적용하며, LAS의 관측 XYZ·점 속성·전체 점 수는 유지합니다. 주변 관측점은 회색으로 표시합니다. 세굴의 색은 실제 표고, 함몰의 색은 해당 관측점의 `depression_depth_m`입니다. 점별 함몰 깊이와 CSV의 격자 패치 깊이는 원본 계산 대상이 다르므로 값이 다를 수 있습니다.
 
 ## 현재 산출물
 
@@ -75,25 +75,22 @@ Multibeam/
 | `world_center_x_m`, `world_center_y_m`, `world_center_z_m` | 손상 중앙 표출 좌표. |
 | `crs` | EPSG:5186. |
 | `area_m2` | 원본 손상 면적. |
-| `mean_depth_m`, `max_depth_m` | 원본 패치 평균·최대 깊이. |
-| `median_depth_m` | 원본 세굴 중앙 깊이. 함몰은 빈값. |
+| `mean_depth_m` | 원본 패치 평균 깊이. |
 | `volume_loss_m3` | 원본 함몰 체적. 세굴은 빈값. |
 | `point_count` | 해당 LAS에 저장된 점 수. |
-| `pointcloud_selection` | `raw_points_in_polygon`: 세굴 영역 내 원본점. `damage_candidates`: 함몰 영역 내 원본 후보점. `cleaned_patch_points`: 점별 후보가 없는 검출 패치의 실제 정제 관측점. |
-| `analysis_method`, `analysis_resolution_m` | 세굴 처리 방법·격자 해상도. 함몰 방법은 `reference_plane`. |
-| `result_origin` | `existing_results`: 기존 검출 결과에서 추출. `computed`: 실행 코드로 새로 계산. |
+| `analysis_resolution_m` | 세굴 격자 해상도. 함몰은 빈값. |
 | `source_data_path` | 원본 입력 경로. CSV 기준 상대경로. |
 | `pointcloud_path`, `visualization_path` | 손상 LAS·PNG 경로. CSV 기준 상대경로. |
 | `boundary_xy_json` | 원본 검출 경계와 내부 구멍을 포함한 GeoJSON 형식 좌표. EPSG:5186, m. |
 
 ## 다운로드
 
-원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v3)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
+원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v4)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
 
 | Release 파일 | 내용 |
 |---|---|
-| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v3/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
-| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v3/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
+| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v4/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
+| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v4/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
 
 `Demo/Multibeam` 폴더에서 다음 명령으로 다운로드·압축 해제합니다. ZIP과 내부 파일의 SHA256을 확인합니다.
 
@@ -163,4 +160,4 @@ Python 3.13 환경에서 실행합니다.
 
 원본 predicted 방법에서 발생하는 division-by-zero 등 기존 계산의 실패는 작업 로그에 기록합니다. 알고리즘 SHA256을 항상 확인하며, 원본 노트북 보관본이 있는 환경에서는 계산 AST와 원본 13개 파일도 대조합니다.
 
-함몰 격자 패치와 개별 점 후보는 원본 알고리즘에서 서로 다른 MAD 기준으로 검출합니다. 새로운 입력에서 검출 패치 안에 개별 후보점이 없으면 그 패치의 실제 정제 관측점을 추출하고 `pointcloud_selection`에 기록합니다. 현재 A 산출물 4개는 모두 기존 후보점을 사용했습니다.
+함몰 격자 패치와 개별 점 후보는 원본 알고리즘에서 서로 다른 MAD 기준으로 검출합니다. 새로운 입력에서 검출 패치 안에 개별 후보점이 없으면 그 패치의 실제 정제 관측점을 추출하고 최종 산출물 폴더 밖의 검증 기록에 추출 방식을 저장합니다. 현재 A 산출물 4개는 모두 기존 후보점을 사용했습니다.

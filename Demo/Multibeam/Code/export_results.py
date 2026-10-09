@@ -28,8 +28,8 @@ ROOT = CODE.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam" / "Multibeam_work"
 FIELDS = ["dataset", "damage_id", "source_damage_id", "damage_type", "damage_name_ko",
           "world_center_x_m", "world_center_y_m", "world_center_z_m", "crs",
-          "area_m2", "mean_depth_m", "max_depth_m", "median_depth_m", "volume_loss_m3",
-          "point_count", "pointcloud_selection", "analysis_method", "analysis_resolution_m", "result_origin",
+          "area_m2", "mean_depth_m", "volume_loss_m3",
+          "point_count", "analysis_resolution_m",
           "source_data_path", "pointcloud_path", "visualization_path", "boundary_xy_json"]
 KEY_DTYPE = np.dtype([("X", "<i4"), ("Y", "<i4"), ("Z", "<i4")])
 
@@ -124,7 +124,7 @@ def read_existing(output):
                 for row in csv.DictReader(stream):
                     if "overlay_path" in row:
                         row["visualization_path"] = row.pop("overlay_path")
-                    rows.append(row)
+                    rows.append({name: row[name] for name in FIELDS})
     return rows
 
 
@@ -303,14 +303,20 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
             report.append(verify_las(feature, staging, native_header))
             report[-1]["visualization"] = make_visualization(feature, staging)
             center = feature["geometry"].centroid
-            new_rows.append(dict(zip(FIELDS, [source_input.stem, feature["id"], feature["source_id"], feature["kind"],
-                "세굴" if feature["kind"] == "SC" else "슬래브 함몰", float(center.x), float(center.y), feature["center_z"],
-                "EPSG:5186", feature["area"], feature["mean_depth"], feature["max_depth"], feature["median_depth"], feature["volume"],
-                feature["point_count"], feature["selection"], method if feature["kind"] == "SC" else "reference_plane",
-                resolution if feature["kind"] == "SC" else "", result_origin,
-                os.path.relpath(source_input, output / "Result"),
-                f"{feature['kind']}/{feature['id']}.las", f"../Visualiza/{feature['kind']}/{feature['id']}.png",
-                json.dumps(shapely.geometry.mapping(feature["geometry"]), separators=(",", ":"))], strict=True)))
+            new_rows.append({
+                "dataset": source_input.stem, "damage_id": feature["id"],
+                "source_damage_id": feature["source_id"], "damage_type": feature["kind"],
+                "damage_name_ko": "세굴" if feature["kind"] == "SC" else "슬래브 함몰",
+                "world_center_x_m": float(center.x), "world_center_y_m": float(center.y),
+                "world_center_z_m": feature["center_z"], "crs": "EPSG:5186",
+                "area_m2": feature["area"], "mean_depth_m": feature["mean_depth"],
+                "volume_loss_m3": feature["volume"], "point_count": feature["point_count"],
+                "analysis_resolution_m": resolution if feature["kind"] == "SC" else "",
+                "source_data_path": os.path.relpath(source_input, output / "Result"),
+                "pointcloud_path": f"{feature['kind']}/{feature['id']}.las",
+                "visualization_path": f"../Visualiza/{feature['kind']}/{feature['id']}.png",
+                "boundary_xy_json": json.dumps(shapely.geometry.mapping(feature["geometry"]), separators=(",", ":")),
+            })
             print(f"{feature['id']}: {feature['point_count']:,} measured points; 3D PNG rendered", flush=True)
         rows = [row for row in old_rows if row["dataset"] != source_input.stem] + new_rows
         for kind in ("SC", "DP"):

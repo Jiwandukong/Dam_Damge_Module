@@ -23,6 +23,7 @@ from shapely.geometry import shape
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam/Multibeam_work"
+REMOVED_CSV_FIELDS = {"max_depth_m", "median_depth_m", "pointcloud_selection", "analysis_method", "result_origin"}
 
 
 def seed_for(identifier):
@@ -118,10 +119,10 @@ def make_visualization(feature, staging):
     ax = fig.add_axes([0, 0, 1, 1], projection="3d", computed_zorder=False)
     ax.set_facecolor("white")
     if len(context):
-        ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#9cabb5", s=0.75,
+        ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#9cabb5", s=1,
                    alpha=0.23, linewidths=0, depthshade=False, zorder=1)
     ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=values, cmap=cmap, norm=norm,
-               s=5 if len(cloud) < 5_000 else 0.9, alpha=0.95, linewidths=0,
+               s=1, alpha=0.95, linewidths=0,
                depthshade=False, zorder=2)
     ax.set_xlim(limits[:, 0])
     ax.set_ylim(limits[:, 1])
@@ -136,7 +137,8 @@ def make_visualization(feature, staging):
     plt.close(fig)
     return {"id": feature["id"], "sampled_damage_points": len(xyz),
             "sampled_context_points": len(context), "vertical_detail_factor": 1, "view_count": 1, "annotations": False,
-            "true_scale": True, "image_size": [1800, 1050], "observed_xyz_only": True}
+            "true_scale": True, "image_size": [1800, 1050], "observed_xyz_only": True,
+            "damage_point_size_pt2": 1, "context_point_size_pt2": 1}
 
 
 def main():
@@ -154,9 +156,12 @@ def main():
             continue
         with path.open(encoding="utf-8-sig", newline="") as stream:
             reader = csv.DictReader(stream)
-            fields = ["visualization_path" if name == "overlay_path" else name for name in reader.fieldnames]
+            fields = ["visualization_path" if name == "overlay_path" else name
+                      for name in reader.fieldnames if name not in REMOVED_CSV_FIELDS]
             rows = list(reader)
         for row in rows:
+            for name in REMOVED_CSV_FIELDS:
+                row.pop(name, None)
             row.pop("overlay_path", None)
             row["visualization_path"] = f"../Visualiza/{kind}/{row['damage_id']}.png"
             geometry = shape(json.loads(row["boundary_xy_json"]))
@@ -164,7 +169,7 @@ def main():
             margin = max(2.0, max(east - west, north - south) * 0.15)
             features.append({"kind": kind, "id": row["damage_id"], "geometry": geometry,
                              "area": float(row["area_m2"]), "mean_depth": float(row["mean_depth_m"]),
-                             "max_depth": float(row["max_depth_m"]), "center_z": float(row["world_center_z_m"]),
+                             "center_z": float(row["world_center_z_m"]),
                              "point_count": int(row["point_count"]),
                              "context_bounds": [west - margin, south - margin, east + margin, north + margin],
                              "source": (output / "Result" / row["source_data_path"]).resolve()})
