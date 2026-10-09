@@ -16,21 +16,27 @@ import laspy
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+from mpl_toolkits.mplot3d import proj3d
 import numpy as np
 import shapely
 from shapely.geometry import shape
+from output_rules import REMOVED_CSV_FIELDS, apply_exclusions
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam/Multibeam_work"
-REMOVED_CSV_FIELDS = {"max_depth_m", "median_depth_m", "pointcloud_selection", "analysis_method", "result_origin"}
+BACKGROUND = "#080c14"
+POINT_SIZE = 6
+IMAGE_SIZE = (3840, 2160)
+DPI = 300
+BRIGHT_COLORS = LinearSegmentedColormap.from_list("bright_damage", ["#30dfff", "#70ffca", "#f8ff72", "#ff9860"])
 
 
 def seed_for(identifier):
     return int.from_bytes(hashlib.sha256(identifier.encode()).digest()[:8], "little")
 
 
-def sample_las(path, limit=90_000):
+def sample_las(path, limit=180_000):
     """Select reproducible observed points, preserving their measured XYZ and depth."""
     with laspy.open(path) as reader:
         count = reader.header.point_count
@@ -91,6 +97,28 @@ def collect_context(source, features, limit=30_000):
         feature["context"] = coordinates
 
 
+def fit_camera(fig, ax, span, cloud, context):
+    """Enlarge the orthographic view uniformly, retaining margins around all displayed points."""
+    initial_zoom = 0.95
+    ax.set_box_aspect(span, zoom=initial_zoom)
+    fig.canvas.draw()
+    visible = np.concatenate([cloud, context]) if len(context) else cloud
+    x, y, _ = proj3d.proj_transform(visible[:, 0], visible[:, 1], visible[:, 2], ax.get_proj())
+    pixels = ax.transData.transform(np.column_stack([x, y]))
+    world_center = np.array([np.mean(ax.get_xlim()), np.mean(ax.get_ylim()), np.mean(ax.get_zlim())])
+    x0, y0, _ = proj3d.proj_transform(*world_center, ax.get_proj())
+    pivot = ax.transData.transform([x0, y0])
+    low, high = pixels.min(axis=0), pixels.max(axis=0)
+    width, height = fig.canvas.get_width_height()
+    margin = np.array([width, height]) * 0.055
+    space_low, space_high = pivot - margin, np.array([width, height]) - margin - pivot
+    factors = np.concatenate([space_low / np.maximum(pivot - low, 1),
+                              space_high / np.maximum(high - pivot, 1)])
+    zoom = initial_zoom * min(float(factors.min()), 3.0)
+    ax.set_box_aspect(span, zoom=zoom)
+    return zoom
+
+
 def make_visualization(feature, staging):
     path = Path(staging) / f"Result/{feature['kind']}/{feature['id']}.las"
     xyz, depth, bounds = sample_las(path)
@@ -101,7 +129,12 @@ def make_visualization(feature, staging):
     if isinstance(context, list):
         context = np.concatenate(context) if context else np.empty((0, 3))
     context = context - center
-    west, south, east, north = feature["context_bounds"]
+    west, south, east, north = feature["geometry"].bounds
+    margin = max(0.08, max(east - west, north - south) * 0.08)
+    west, south, east, north = west - margin, south - margin, east + margin, north + margin
+    if len(context):
+        context = context[(context[:, 0] >= west - center[0]) & (context[:, 0] <= east - center[0])
+                          & (context[:, 1] >= south - center[1]) & (context[:, 1] <= north - center[1])]
     limits = np.array([[west - center[0], south - center[1], bounds[0, 2] - center[2]],
                        [east - center[0], north - center[1], bounds[1, 2] - center[2]]])
     if len(context):
@@ -113,32 +146,36 @@ def make_visualization(feature, staging):
     limits[:, 2] += np.array([-1, 1]) * max(span[2] * 0.06, 0.03)
     span = limits[1] - limits[0]
     values = depth if feature["kind"] == "DP" and depth is not None else xyz[:, 2]
-    cmap = "YlGnBu" if feature["kind"] == "DP" else "viridis"
-    norm = Normalize(vmin=float(values.min()), vmax=float(values.max()) + 1e-12)
-    fig = plt.figure(figsize=(12, 7), dpi=150, facecolor="white")
+    color_low, color_high = np.percentile(values, [1, 99])
+    norm = Normalize(vmin=float(color_low), vmax=float(color_high) + 1e-12, clip=True)
+    fig = plt.figure(figsize=(IMAGE_SIZE[0] / DPI, IMAGE_SIZE[1] / DPI), dpi=DPI, facecolor=BACKGROUND)
     ax = fig.add_axes([0, 0, 1, 1], projection="3d", computed_zorder=False)
-    ax.set_facecolor("white")
+    ax.set_facecolor(BACKGROUND)
     if len(context):
-        ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#9cabb5", s=1,
-                   alpha=0.23, linewidths=0, depthshade=False, zorder=1)
-    ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=values, cmap=cmap, norm=norm,
-               s=1, alpha=0.95, linewidths=0,
-               depthshade=False, zorder=2)
+        ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#99a9bc", s=POINT_SIZE,
+                   alpha=0.65, linewidths=0, depthshade=False, clip_on=False, zorder=1)
+    ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=values, cmap=BRIGHT_COLORS, norm=norm,
+               s=POINT_SIZE, alpha=1, linewidths=0,
+               depthshade=False, clip_on=False, zorder=2)
     ax.set_xlim(limits[:, 0])
     ax.set_ylim(limits[:, 1])
     ax.set_zlim(limits[:, 2])
-    ax.set_box_aspect(span, zoom=0.95)
-    ax.view_init(elev=26, azim=-58)
+    ax.view_init(elev=32, azim=-35)
     ax.set_proj_type("ortho")
     ax.set_axis_off()
+    zoom = fit_camera(fig, ax, span, cloud, context)
     destination = Path(staging) / f"Visualiza/{feature['kind']}/{feature['id']}.png"
     destination.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(destination, facecolor="white")
+    fig.savefig(destination, facecolor=BACKGROUND)
     plt.close(fig)
     return {"id": feature["id"], "sampled_damage_points": len(xyz),
             "sampled_context_points": len(context), "vertical_detail_factor": 1, "view_count": 1, "annotations": False,
-            "true_scale": True, "image_size": [1800, 1050], "observed_xyz_only": True,
-            "damage_point_size_pt2": 1, "context_point_size_pt2": 1}
+            "true_scale": True, "image_size": list(IMAGE_SIZE), "observed_xyz_only": True,
+            "damage_point_size_pt2": POINT_SIZE, "context_point_size_pt2": POINT_SIZE,
+            "background": BACKGROUND, "dpi": DPI, "camera_zoom": zoom,
+            "damage_alpha": 1, "context_alpha": 0.65,
+            "color_display_range": [float(color_low), float(color_high)],
+            "color_range_percentiles": [1, 99]}
 
 
 def main():
@@ -148,6 +185,7 @@ def main():
     parser.add_argument("--slab-source", type=Path, help="DP 주변 관측점으로 사용할 원본 슬래브 LAS (선택)")
     args = parser.parse_args()
     output, work = args.output_dir.resolve(), args.work_dir.resolve()
+    apply_exclusions(output)
     os.environ.setdefault("MPLCONFIGDIR", str(work / "cache/matplotlib"))
     tables, features = {}, []
     for kind in ("SC", "DP"):

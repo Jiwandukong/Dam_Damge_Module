@@ -22,14 +22,16 @@ from pyproj import CRS
 import shapely
 
 from runtime import CODE, file_hash, write_json
+from output_rules import apply_exclusions, excluded_damage, exclusions
+from map_model import GridMapper, MAPPING_FIELDS, map_rows, model_path
 from visualize_results import collect_context, make_visualization
 
 ROOT = CODE.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam" / "Multibeam_work"
 FIELDS = ["dataset", "damage_id", "source_damage_id", "damage_type", "damage_name_ko",
-          "world_center_x_m", "world_center_y_m", "world_center_z_m", "crs",
+          "world_center_x_m", "world_center_y_m", "world_center_z_m", "crs", *MAPPING_FIELDS,
           "area_m2", "mean_depth_m", "volume_loss_m3",
-          "point_count", "analysis_resolution_m",
+          "point_count",
           "source_data_path", "pointcloud_path", "visualization_path", "boundary_xy_json"]
 KEY_DTYPE = np.dtype([("X", "<i4"), ("Y", "<i4"), ("Z", "<i4")])
 
@@ -124,12 +126,12 @@ def read_existing(output):
                 for row in csv.DictReader(stream):
                     if "overlay_path" in row:
                         row["visualization_path"] = row.pop("overlay_path")
-                    rows.append({name: row[name] for name in FIELDS})
+                    rows.append({name: row.get(name, "") for name in FIELDS})
     return rows
 
 
 def assign_ids(features, rows, dataset):
-    used = {row["damage_id"] for row in rows}
+    used = {row["damage_id"] for row in rows} | {rule["damage_id"] for rule in exclusions()}
     existing = {(row["damage_type"], row["source_damage_id"]): row["damage_id"]
                 for row in rows if row["dataset"] == dataset}
     for feature in features:
@@ -277,7 +279,14 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
     las_source = Path(las_source or source_input).resolve()
     if output == work or output in work.parents or work in output.parents:
         raise ValueError("Work and final Output must use separate directories")
+    model = model_path()
+    mapper = GridMapper(model) if model.is_file() else None
     features = load_features(results, source_input.stem, method, resolution)
+    rules = exclusions()
+    excluded = [dict(excluded_damage(source_input.stem, f["kind"], f["source_id"], rules))
+                for f in features if excluded_damage(source_input.stem, f["kind"], f["source_id"], rules)]
+    features = [f for f in features if not excluded_damage(source_input.stem, f["kind"], f["source_id"], rules)]
+    apply_exclusions(output)
     old_rows = read_existing(output)
     assign_ids(features, old_rows, source_input.stem)
     staging_root = work / "export_staging"
@@ -311,7 +320,6 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
                 "world_center_z_m": feature["center_z"], "crs": "EPSG:5186",
                 "area_m2": feature["area"], "mean_depth_m": feature["mean_depth"],
                 "volume_loss_m3": feature["volume"], "point_count": feature["point_count"],
-                "analysis_resolution_m": resolution if feature["kind"] == "SC" else "",
                 "source_data_path": os.path.relpath(source_input, output / "Result"),
                 "pointcloud_path": f"{feature['kind']}/{feature['id']}.las",
                 "visualization_path": f"../Visualiza/{feature['kind']}/{feature['id']}.png",
@@ -319,6 +327,7 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
             })
             print(f"{feature['id']}: {feature['point_count']:,} measured points; 3D PNG rendered", flush=True)
         rows = [row for row in old_rows if row["dataset"] != source_input.stem] + new_rows
+        mapping_details = map_rows(rows, mapper)
         for kind in ("SC", "DP"):
             with (staging / "Result" / (kind + "_result.csv")).open("w", encoding="utf-8-sig", newline="") as stream:
                 writer = csv.DictWriter(stream, fieldnames=FIELDS)
@@ -336,8 +345,11 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
                     path = (output / "Result" / relative).resolve()
                     if output in path.parents and path.is_file(): path.unlink()
     verification = {"passed": True, "dataset": source_input.stem, "result_origin": result_origin,
+                    "excluded_output_damages": excluded,
                     "source_input_sha256": file_hash(source_input), "source_results": str(results),
                     "center_definition": "polygon centroid XY; nearest extracted observed point Z",
+                    "model_mapping": dict(mapper.provenance, features=mapping_details) if mapper else {
+                        "model": str(model), "status": "model_missing", "features": mapping_details},
                     "features": report, "source_gpkg_sha256": {str(f["source_gpkg"]): file_hash(f["source_gpkg"]) for f in features}}
     write_json(work / "verification" / (source_input.stem + "_export.json"), verification)
     return new_rows

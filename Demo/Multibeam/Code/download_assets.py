@@ -11,6 +11,10 @@ import sys
 from urllib.request import Request, urlopen
 import zipfile
 
+sys.dont_write_bytecode = True
+
+from output_rules import apply_exclusions
+
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_WORK = ROOT.parent / "unmodified_multibeam/Multibeam_work"
 
@@ -66,6 +70,8 @@ def ensure_assets(scope="all", work=None, manifest=None):
                     raise RuntimeError(f"Extracted file checksum mismatch: {member['path']}")
                 os.replace(temporary, destination)
         print(f"{asset['name']}: download and extraction verified", flush=True)
+    if scope in ("all", "results"):
+        apply_exclusions(ROOT / "Output")
 
 
 def main():

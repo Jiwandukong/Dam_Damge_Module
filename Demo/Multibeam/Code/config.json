@@ -4,5 +4,18 @@
   ],
   "excluded_input_patterns": [
     "*multibeam_B*"
+  ],
+  "model_mapping": {
+    "model_path": "../Dam_model/Daecheongdam/daecheongdam_regions_grid5m.gltf",
+    "method": "center_XY_vertical_projection_nearest_Z"
+  },
+  "excluded_output_damages": [
+    {
+      "dataset": "0913_multibeam_A_align",
+      "damage_type": "DP",
+      "source_damage_id": "4",
+      "damage_id": "DP-004",
+      "reason": "사용자 요청: 관측점 122개로 전달 산출물에서 제외"
+    }
   ]
 }
