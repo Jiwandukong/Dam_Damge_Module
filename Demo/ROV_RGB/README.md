@@ -30,14 +30,6 @@ ROV_RGB/
 | `Output/Overlay/CRC/`, `SPL/` | 손상별 정사각형 Overlay PNG. 파일명이 CSV의 `damage_id`와 같습니다. |
 | `Output/Result/` | 균열·박락 클래스별 최종 CSV 두 파일. UTF-8 BOM 인코딩이며 같은 13개 컬럼을 사용합니다. |
 
-## 원본과 Overlay 확인
-
-CSV의 `image`로 `Data/<image>`를 찾고, `damage_type`과 `damage_id`로 `Output/Overlay/<damage_type>/<damage_id>.png`를 찾습니다. 예를 들어 `damage_id=R000001`, `damage_type=CRC`인 행의 Overlay는 `Output/Overlay/CRC/R000001.png`입니다.
-
-Overlay는 균열을 **빨강**, 박락을 **노랑**으로 30% 혼합 표시한 PNG입니다. 손상 영역을 포함하도록 **128px 배수의 정사각형**으로 자르며, 원본 프레임 밖의 범위는 검정으로 패딩합니다. 한 이미지에 여러 손상이 있으면 손상별 Overlay와 CSV 행을 각각 생성합니다.
-
-`pixel_nodes_json`은 Overlay의 잘린 좌표가 아니라 **원본 프레임 기준 경계 좌표**입니다. CSV parser로 행을 읽은 뒤 JSON 배열로 해석하면 원본 이미지 위에 경계를 표시할 수 있습니다.
-
 ## 결과 CSV 컬럼
 
 두 CSV에는 아래 **13개 컬럼**을 같은 순서로 저장하며, 행은 `damage_id` 순서로 정렬합니다.
