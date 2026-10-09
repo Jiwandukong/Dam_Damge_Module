@@ -10,7 +10,7 @@ ROV 원본 프레임 **35장**에 Sunflicker 전처리와 DeepLabV3+/ResNet101�
 | [Output/Result/CRC_result.csv](Output/Result/CRC_result.csv) | 균열 결과 35행. |
 | [Output/Result/SPL_result.csv](Output/Result/SPL_result.csv) | 박락 결과 45행. |
 
-CSV는 37개 컬럼이며 손상 ID, 픽셀 polygon, 신뢰도, 이미지 경로, XYZ, **`grid_id`·`member_name`**을 담습니다. 이미지 경로는 `Output/Result` 기준 상대경로이며, CSV 인코딩은 UTF-8 BOM입니다. 실측 치수는 없으며 면적·길이는 픽셀 단위입니다.
+CSV는 31개 컬럼이며 손상 ID, 픽셀 polygon, 신뢰도, 이미지 경로, XYZ, **`grid_id`·`member_name`**을 담습니다. 이미지 경로는 `Output/Result` 기준 상대경로이며, CSV 인코딩은 UTF-8 BOM입니다. 손상의 길이·폭·면적은 산출하지 않습니다.
 
 80행 모두 모델의 실제 격자와 상위 부재명에 연결되어 있습니다. 부재는 `SPW_여수로_교각_도수면`이며, 16개 grid로 위치를 구분합니다. 결과는 위 두 클래스별 CSV로 저장합니다.
 

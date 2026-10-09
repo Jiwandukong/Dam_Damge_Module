@@ -64,7 +64,7 @@ def export_image(image_path,mask,probability,output,rows,counter,min_area):
             temp=destination.with_suffix('.png.new');overlay.save(temp,format='PNG');temp.replace(destination)
             row=dict.fromkeys(COLUMNS,'')
             row.update(image=image_path.name,damage_id=damage_id,damage_type=kind,damage_name_ko=NAMES[kind],
-                       pixel_nodes_json=json.dumps(rings[0] if rings else [],separators=(',',':')),area_px=area,
+                       pixel_nodes_json=json.dumps(rings[0] if rings else [],separators=(',',':')),
                        DRI=float(probability[class_id,y0:y0+bh,x0:x0+bw][local].mean(dtype=np.float64)),
                        source_image_path=os.path.relpath(image_path,output/'Result').replace(os.sep,'/'),
                        overlay_path=f'../Overlay/{kind}/{damage_id}.png',mapping_status='pending',measurement_status='pixel_only',
@@ -72,9 +72,6 @@ def export_image(image_path,mask,probability,output,rows,counter,min_area):
                        crop_origin_x_px=x,crop_origin_y_px=y,crop_size_px=side,
                        overlay_padding_px_json=json.dumps([max(0,-x),max(0,-y),max(0,x+side-w),max(0,y+side-h)]),
                        result_origin='model_prediction_demo_in_sample')
-            if kind=='CRC':
-                points=np.column_stack((xx,yy)).astype(np.float32)
-                a,b=cv2.minAreaRect(points)[1];row.update(length_px=max(1.,float(max(a,b))),width_px=max(1.,float(min(a,b))))
             rows.append(row);exported+=1
         if represented!=int((mask==class_id).sum()):raise ValueError('Components lost prediction pixels')
         frame_stats[kind]=dict(components=count-1,exported=exported,filtered_pixels=filtered,mask_pixels=represented)

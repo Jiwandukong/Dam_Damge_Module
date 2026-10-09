@@ -9,12 +9,12 @@ REMOVED_COLUMNS = frozenset({
     'mapping_status', 'measurement_status', 'frame_group_id', 'frame_group_index',
     'frame_group_size', 'frame_offset_x_m', 'member_id', 'member_node_id',
     'position_origin', 'grid_guid',
+    'length_px', 'length_m', 'width_px', 'width_m', 'area_m2', 'area_px',
 })
 
 RESULT_COLUMNS = [name for name in [
     'image', 'damage_id', 'damage_type', 'damage_name_ko', 'pixel_nodes_json',
-    'world_center_x_m', 'world_center_y_m', 'world_center_z_m', 'length_px', 'length_m',
-    'width_px', 'width_m', 'area_m2', 'area_px', 'member_name', 'section_name',
+    'world_center_x_m', 'world_center_y_m', 'world_center_z_m', 'member_name', 'section_name',
     'grid_id', 'grid_guid', 'DRI', 'source_image_path', 'overlay_path',
     'mapping_status', 'measurement_status', 'pixel_center_x_px', 'pixel_center_y_px',
     'bbox_px_json', 'crop_origin_x_px', 'crop_origin_y_px', 'crop_size_px',
