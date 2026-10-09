@@ -1,0 +1,7 @@
+# Large survey inputs are distributed through the GitHub Release.
+data/*.e57
+data/*.ply
+__pycache__/
+*.py[cod]
+*.log
+.venv/

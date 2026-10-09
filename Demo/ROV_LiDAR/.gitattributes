@@ -1,0 +1,5 @@
+*.las binary
+*.png binary
+code/tools/whitebox/whitebox_tools binary
+output/Result/*.csv -text whitespace=cr-at-eol
+code/algorithms/*.py -text -whitespace
