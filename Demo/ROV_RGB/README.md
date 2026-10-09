@@ -5,7 +5,7 @@ ROV 원본 프레임 **35장**에 Sunflicker 전처리와 DeepLabV3+/ResNet101�
 | 경로 | 내용 |
 |---|---|
 | `Data/` | 원본 RGB 프레임 JPG 35장. |
-| `Code/` | 전처리·모델 추론·결과 생성·3D 웹뷰어. |
+| `Code/` | 전처리·모델 추론·결과 생성·시연용 3D 좌표 배치. |
 | `Output/Overlay/CRC/`, `SPL/` | 손상별 정사각형 Overlay PNG 80개. |
 | [Output/Result/CRC_result.csv](Output/Result/CRC_result.csv) | 균열 결과 35행. |
 | [Output/Result/SPL_result.csv](Output/Result/SPL_result.csv) | 박락 결과 45행. |
@@ -28,11 +28,3 @@ bash Code/run.sh
 필요한 파일은 최초 실행 시 SHA256을 확인해 자동으로 다운로드합니다. [ROV Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/rov-rgb-demo-v1)는 **모델 약 175MiB**와 원본 영상에서 계산한 35장의 Sunflicker RGB 캐시를 제공합니다. [댐 모델 Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/daecheong-dam-grid5m-v1)를 함께 사용합니다. 기본 캐시 위치는 `~/.cache/dam_damage_module/rov_rgb/`이며 `ROV_RGB_WORK_DIR`로 변경할 수 있습니다.
 
 제공 프레임은 캐시로 재현합니다. 다른 프레임의 전처리에는 `bash Code/run.sh --input <프레임_폴더> --video <원본.mp4>`를 사용합니다. 모델·3D 모델을 직접 지정하려면 `--checkpoint`, `--dam-model`을 사용합니다.
-
-## 웹뷰어
-
-```bash
-bash Code/tools/web_viewer/run.sh --bind 127.0.0.1 --port 8788
-```
-
-출력되는 접속 링크로 부재·격자·손상 위치와 원본·Overlay를 확인하고 CSV를 다운로드할 수 있습니다.
