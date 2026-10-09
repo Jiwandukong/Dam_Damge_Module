@@ -17,8 +17,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
-from matplotlib.lines import Line2D
-from matplotlib.ticker import MaxNLocator
 import numpy as np
 import shapely
 from shapely.geometry import shape
@@ -113,80 +111,31 @@ def make_visualization(feature, staging):
     span = np.maximum(limits[1] - limits[0], 0.01)
     limits[:, 2] += np.array([-1, 1]) * max(span[2] * 0.06, 0.03)
     span = limits[1] - limits[0]
-    desired = max(span[:2]) * 0.35 / span[2]
-    exaggeration = next((value for value in (2, 5, 10, 20) if value >= desired), 20)
     values = depth if feature["kind"] == "DP" and depth is not None else xyz[:, 2]
-    color_label = "Point depression depth (m)" if depth is not None else "Observed elevation Z (m)"
     cmap = "YlGnBu" if feature["kind"] == "DP" else "viridis"
     norm = Normalize(vmin=float(values.min()), vmax=float(values.max()) + 1e-12)
     fig = plt.figure(figsize=(12, 7), dpi=150, facecolor="white")
-    axes = [fig.add_axes([0.025, 0.23, 0.43, 0.57], projection="3d", computed_zorder=False),
-            fig.add_axes([0.49, 0.23, 0.43, 0.57], projection="3d", computed_zorder=False)]
-    for ax, factor in zip(axes, (1, exaggeration)):
-        ax.set_facecolor("white")
-        if len(context):
-            ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#9cabb5", s=0.75,
-                       alpha=0.23, linewidths=0, depthshade=False, zorder=1)
-        scatter = ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=values, cmap=cmap, norm=norm,
-                             s=5 if len(cloud) < 5_000 else 0.9, alpha=0.95, linewidths=0,
-                             depthshade=False, zorder=2)
-        ax.scatter([0], [0], [0], marker="+", c="#dd3750", s=120, linewidths=1.8,
-                   depthshade=False, zorder=3)
-        ax.set_xlim(limits[:, 0])
-        ax.set_ylim(limits[:, 1])
-        ax.set_zlim(limits[:, 2])
-        # Coordinates and tick labels remain in measured metres; only box proportions change.
-        ax.set_box_aspect(span * np.array([1, 1, factor]), zoom=0.95)
-        ax.view_init(elev=26, azim=-58)
-        ax.set_proj_type("ortho")
-        ax.set_xlabel("X from center (m)", labelpad=8, fontsize=9, color="#52687a")
-        ax.set_ylabel("Y from center (m)", labelpad=8, fontsize=9, color="#52687a")
-        ax.set_zlabel("Z from center (m)", labelpad=6, fontsize=9, color="#52687a")
-        ax.tick_params(labelsize=8, colors="#52687a", pad=2)
-        ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
-        ax.yaxis.set_major_locator(MaxNLocator(nbins=5))
-        ax.zaxis.set_major_locator(MaxNLocator(nbins=4))
-        if factor == 1 and span[2] / max(span[:2]) < 0.05:
-            # A physically shallow cloud has no room for readable Z ticks in the true-scale view.
-            ax.set_zticks([])
-        for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-            axis.set_pane_color((0.96, 0.975, 0.985, 1))
-            axis._axinfo["grid"].update(color="#dce4e9", linewidth=0.5)
-            axis.line.set_color("#c5d0d8")
-        title = "True scale | XYZ 1:1:1" if factor == 1 else f"Height detail | Z display x{factor}"
-        ax.set_title(title, fontsize=11, color="#17394e", pad=6)
-    bar = fig.colorbar(scatter, cax=fig.add_axes([0.585, 0.145, 0.31, 0.016]), orientation="horizontal")
-    bar.ax.set_title(color_label, fontsize=9, color="#52687a", pad=7)
-    bar.ax.tick_params(labelsize=8, colors="#52687a")
-    bar.outline.set_edgecolor("#dce4e9")
-    name = "Scour" if feature["kind"] == "SC" else "Slab depression"
-    fig.text(0.045, 0.955, f"{feature['id']}  |  {name}  |  3D point cloud", fontsize=19,
-             fontweight="bold", color="#17394e")
-    fig.text(0.045, 0.905,
-             f"Area {feature['area']:.2f} m²     Mean depth {feature['mean_depth']:.3f} m     "
-             f"Max depth {feature['max_depth']:.3f} m     LAS {feature['point_count']:,} points",
-             fontsize=10, color="#52687a")
-    legend = [Line2D([], [], color=plt.get_cmap(cmap)(0.75), marker="o", linestyle="none", markersize=5,
-                     label="Damage observations")]
+    ax = fig.add_axes([0, 0, 1, 1], projection="3d", computed_zorder=False)
+    ax.set_facecolor("white")
     if len(context):
-        legend.append(Line2D([], [], color="#9cabb5", marker="o", linestyle="none", markersize=5,
-                             label="Surrounding observations"))
-    legend.append(Line2D([], [], color="#dd3750", marker="+", linestyle="none", markersize=9,
-                         label="Damage center"))
-    fig.legend(handles=legend, loc="upper left", bbox_to_anchor=(0.04, 0.885), ncol=3,
-               frameon=False, fontsize=9)
-    fig.text(0.045, 0.085,
-             f"Center: X {center[0]:.3f}   Y {center[1]:.3f}   Z {center[2]:.3f} m   |   EPSG:5186",
-             fontsize=9, color="#52687a")
-    fig.text(0.045, 0.042,
-             f"Same measured 3D cloud in both views. Right view enlarges Z x{exaggeration} for detail. "
-             "LAS coordinates are unchanged.", fontsize=9, color="#52687a")
+        ax.scatter(context[:, 0], context[:, 1], context[:, 2], c="#9cabb5", s=0.75,
+                   alpha=0.23, linewidths=0, depthshade=False, zorder=1)
+    ax.scatter(cloud[:, 0], cloud[:, 1], cloud[:, 2], c=values, cmap=cmap, norm=norm,
+               s=5 if len(cloud) < 5_000 else 0.9, alpha=0.95, linewidths=0,
+               depthshade=False, zorder=2)
+    ax.set_xlim(limits[:, 0])
+    ax.set_ylim(limits[:, 1])
+    ax.set_zlim(limits[:, 2])
+    ax.set_box_aspect(span, zoom=0.95)
+    ax.view_init(elev=26, azim=-58)
+    ax.set_proj_type("ortho")
+    ax.set_axis_off()
     destination = Path(staging) / f"Visualiza/{feature['kind']}/{feature['id']}.png"
     destination.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(destination, facecolor="white")
     plt.close(fig)
     return {"id": feature["id"], "sampled_damage_points": len(xyz),
-            "sampled_context_points": len(context), "vertical_detail_factor": exaggeration,
+            "sampled_context_points": len(context), "vertical_detail_factor": 1, "view_count": 1, "annotations": False,
             "true_scale": True, "image_size": [1800, 1050], "observed_xyz_only": True}
 
 

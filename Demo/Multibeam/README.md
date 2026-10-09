@@ -38,9 +38,9 @@ Multibeam/
 | `Output/Visualiza/DP/` | 함몰 LAS의 실제 XYZ와 주변 슬래브 관측점으로 만든 3D 스냅샷. 점의 색은 점별 함몰 깊이입니다. |
 | `Output/Result/*.csv` | 손상별 치수, 중앙 표출 좌표, LAS·PNG 상대경로. UTF-8 BOM 인코딩. |
 
-각 손상은 **LAS 1개와 PNG 1개**에 대응합니다. PNG는 1800×1050의 3D 스냅샷입니다. 왼쪽은 XYZ 실제 축척(1:1:1), 오른쪽은 높이 차를 읽기 위한 Z 확대 보기입니다. 두 보기는 같은 관측 점군이며, 오른쪽의 확대 배율을 이미지에 표시합니다. 축은 중앙점 기준 X/Y/Z 거리(m)이고 `+` 표시는 손상 중앙점입니다.
+각 손상은 **LAS 1개와 PNG 1개**에 대응합니다. PNG는 1800×1050의 단일 3D 점군 스냅샷이며, XYZ 실제 축척(1:1:1)을 사용합니다. 글자·범례·축·눈금·격자·중앙점 마커 없이 점군 형상만 표시합니다.
 
-이미지에만 점 수 제한과 Z 표시 확대를 적용하며, LAS의 관측 XYZ·점 속성·전체 점 수는 유지합니다. 주변 관측점은 회색으로 표시합니다. 세굴의 색은 실제 표고, 함몰의 색은 해당 관측점의 `depression_depth_m`입니다. 점별 함몰 깊이와 CSV의 격자 패치 깊이는 원본 계산 대상이 다르므로 값이 다를 수 있습니다.
+이미지에는 점 수 제한만 적용하며, LAS의 관측 XYZ·점 속성·전체 점 수는 유지합니다. 주변 관측점은 회색으로 표시합니다. 세굴의 색은 실제 표고, 함몰의 색은 해당 관측점의 `depression_depth_m`입니다. 점별 함몰 깊이와 CSV의 격자 패치 깊이는 원본 계산 대상이 다르므로 값이 다를 수 있습니다.
 
 ## 현재 산출물
 
@@ -88,12 +88,12 @@ Multibeam/
 
 ## 다운로드
 
-원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v2)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
+원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 GitHub 저장소의 파일 크기 제한을 넘으므로 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v3)로 제공합니다. 작은 LAS, Visualiza 3D PNG, CSV, 실행 코드는 저장소에 포함합니다.
 
 | Release 파일 | 내용 |
 |---|---|
-| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
-| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v2/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
+| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v3/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
+| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v3/multibeam_A_results.zip) | `Output/`의 LAS 6개, PNG 6개, CSV 2개 전체. |
 
 `Demo/Multibeam` 폴더에서 다음 명령으로 다운로드·압축 해제합니다. ZIP과 내부 파일의 SHA256을 확인합니다.
 
