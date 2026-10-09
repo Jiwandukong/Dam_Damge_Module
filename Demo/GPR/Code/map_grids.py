@@ -1,10 +1,11 @@
-"""Recompute closest model triangles for GPR display points (NumPy and Open3D)."""
+"""Assign GPR display points to the closest dam grid and its parent member."""
 
 import argparse
 from collections import Counter
 import csv
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -138,7 +139,8 @@ def inspect(rows, meshes, kind, center):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", type=Path, default=CSV)
-    parser.add_argument("--output", type=Path, default=HERE / "proximity_review.json")
+    parser.add_argument("--output", type=Path, default=Path(os.environ.get("GPR_WORK_DIR", str(Path.home()/".cache/dam_damage_module/gpr"))) / "grid_mapping_report.json")
+    parser.add_argument("--dam-model", type=Path, default=MODEL)
     parser.add_argument("--preview-transform", type=Path)
     parser.add_argument('--apply-grid-mapping',action='store_true',
                         help='Assign nearby grid triangles after user-selected model anchors are applied')
@@ -155,10 +157,10 @@ def main():
         for row in rows:
             for axis, value in zip("xyz", candidate_world(row["line_no"], row["x_m"], transform)):
                 row["world_center_"+axis+"_m"] = value
-    model, meshes = load_triangles(MODEL)
+    model, meshes = load_triangles(args.dam_model)
     center = np.array([243000.0, 431000.0, 0.0])
-    report = dict(model_path=str(MODEL), model_sha256=sha(MODEL),
-        buffer_sha256={b["uri"]:sha(MODEL.parent/b["uri"]) for b in model["buffers"]},
+    report = dict(model_path=str(args.dam_model), model_sha256=sha(args.dam_model),
+        buffer_sha256={b["uri"]:sha(args.dam_model.parent/b["uri"]) for b in model["buffers"]},
         candidate_csv_sha256=sha(args.csv),
         axis_convention="world XYZ = (glTF X, -glTF Z, glTF Y); equal coordinate frame assumed",
         preview_transform=str(args.preview_transform) if args.preview_transform else None,
@@ -167,7 +169,7 @@ def main():
         sys.path.insert(0,str(GPR/'Code'))
         from coordinate_mapping import DEFAULT_TRANSFORM, candidate_world, load_transform
         transform=load_transform()
-        if not transform.get('model_anchors_applied') or transform['selected_anchors']['model_sha256']!=sha(MODEL):
+        if not transform.get('model_anchors_applied') or transform['selected_anchors']['model_sha256']!=sha(args.dam_model):
             raise ValueError('Apply user-selected anchors from this model before assigning grid/member fields')
         if not np.isfinite(args.max_grid_distance_m) or args.max_grid_distance_m<=0:
             raise ValueError('Grid distance tolerance must be positive and finite')
@@ -181,7 +183,7 @@ def main():
             row['member_name']=detail['parent_node'] if assigned else ''
             mappings.append(dict(damage_id=row['damage_id'],world_xyz=xyz,
                 grid_id=row['grid_id'],member_name=row['member_name'],grid_distance_m=detail['distance_m']))
-        mapping=dict(model_sha256=sha(MODEL),buffer_sha256=report['buffer_sha256'],
+        mapping=dict(model_sha256=sha(args.dam_model),buffer_sha256=report['buffer_sha256'],
             transform_sha256=sha(DEFAULT_TRANSFORM),max_grid_distance_m=args.max_grid_distance_m,
             method='Nearest grid triangle for user-anchored surface projection; XYZ unchanged',
             mapped_count=sum(bool(r['grid_id']) for r in rows),candidates=mappings)
@@ -194,6 +196,7 @@ def main():
         temporary.replace(args.csv)
         report['candidate_csv_sha256']=sha(args.csv)
         report['grid_mapping_applied']=dict(mapped_count=mapping['mapped_count'],max_distance_m=args.max_grid_distance_m)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n")
     print(json.dumps({kind:{key:value for key,value in result.items() if key != "details"}
                       for kind,result in report["results"].items()}, ensure_ascii=False), flush=True)
