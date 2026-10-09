@@ -29,7 +29,7 @@ Multibeam/
 | `Output/Result/DP/` | 슬래브 함몰의 실제 관측 점군(LAS). 점별 함몰 깊이 `depression_depth_m`(m)를 포함합니다. |
 | `Output/Visualize/SC/` | 세굴 점군과 주변 관측점의 3D 스냅샷(PNG). 색은 표고를 나타냅니다. |
 | `Output/Visualize/DP/` | 함몰 점군과 주변 관측점의 3D 스냅샷(PNG). 색은 함몰 깊이를 나타냅니다. |
-| `Output/Result/*.csv` | 손상별 면적·깊이·좌표·격자 및 부재 ID와 LAS·PNG 경로를 담은 요약표. UTF-8 BOM 인코딩. |
+| `Output/Result/*.csv` | 손상별 면적·깊이·좌표·부재명과 LAS·PNG 경로를 담은 요약표. UTF-8 BOM 인코딩. |
 
 각 손상 ID는 **LAS 1개와 PNG 1개**, 해당 종류의 CSV 1개 행에 대응합니다. PNG 해상도는 3840×2160입니다. 전체 산출물은 **LAS 5개, PNG 5개, CSV 2개**입니다.
 
@@ -55,8 +55,7 @@ CSV의 중심 좌표는 손상의 표출 위치입니다. X/Y 좌표계는 **EPS
 | `damage_type`, `damage_name_ko` | SC 세굴 / DP 슬래브 함몰. |
 | `world_center_x_m`, `world_center_y_m`, `world_center_z_m` | 손상 중앙 표출 좌표. |
 | `crs` | EPSG:5186. |
-| `grid_id` | 손상 위치에 대응하는 모델 격자 ID. |
-| `member_id`, `member_name` | 손상이 연결된 부재의 ID와 이름. |
+| `member_name` | 손상 중앙점을 모델 표면에 연결해 찾은 상위 부재·구획의 이름. 현재 SC·DP 5건은 `SPW_감세공_물받이공(수면_아래)`에 연결됩니다. |
 | `area_m2` | 손상 면적(m²). |
 | `mean_depth_m` | 손상 분석 결과의 평균 깊이(m). |
 | `volume_loss_m3` | 함몰 손실 체적(m³). 세굴은 빈값. |
@@ -67,12 +66,12 @@ CSV의 중심 좌표는 손상의 표출 위치입니다. X/Y 좌표계는 **EPS
 
 ## 다운로드
 
-원본 LAS와 전체 산출물 ZIP은 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v6)에서 받을 수 있습니다. 저장소에는 코드, README, CSV, PNG와 작은 LAS가 포함되어 있습니다. 원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 Release 다운로드에 포함됩니다.
+원본 LAS와 전체 산출물 ZIP은 [Multibeam Release](https://github.com/Jiwandukong/Dam_Damge_Module/releases/tag/multibeam-demo-v7)에서 받을 수 있습니다. 저장소에는 코드, README, CSV, PNG와 작은 LAS가 포함되어 있습니다. 원본 LAS(약 1.27GB)와 SC-002 LAS(약 110MB)는 Release 다운로드에 포함됩니다.
 
 | Release 파일 | 내용 |
 |---|---|
-| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v6/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
-| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v6/multibeam_A_results.zip) | 현재 `Output/` 전체: LAS 5개, 4K PNG 5개, CSV 2개. SC 2개·DP 3개이며 격자·부재 ID를 포함합니다. |
+| [multibeam_A_rawdata.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v7/multibeam_A_rawdata.zip) | `Data/0913_multibeam_A_align.las`. |
+| [multibeam_A_results.zip](https://github.com/Jiwandukong/Dam_Damge_Module/releases/download/multibeam-demo-v7/multibeam_A_results.zip) | LAS 5개, 4K PNG 5개, CSV 2개. SC 2개·DP 3개이며 CSV의 부재 정보는 `member_name`만 포함합니다. |
 
 `Demo/Multibeam` 폴더에서 다음 명령으로 원본과 산출물을 다운로드·압축 해제합니다.
 

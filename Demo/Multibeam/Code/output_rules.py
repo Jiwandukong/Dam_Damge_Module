@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 
 REMOVED_CSV_FIELDS = {"max_depth_m", "median_depth_m", "pointcloud_selection", "analysis_method", "result_origin",
-                      "grid_guid", "analysis_resolution_m"}
+                      "grid_id", "grid_guid", "member_id", "analysis_resolution_m"}
 
 
 def exclusions():
