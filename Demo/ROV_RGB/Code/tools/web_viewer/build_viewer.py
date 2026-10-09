@@ -14,6 +14,7 @@ from PIL import Image
 from paths import ROOT, WORK, read_json, write_json, sha
 from demo_mapping import SpillwayWaterlineGridSampler
 from download_assets import ensure_dam_model
+from result_export import read_class_results
 
 HERE = Path(__file__).resolve().parent
 DIST = WORK/'web_viewer/dist'
@@ -30,9 +31,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dam-model', type=Path)
     args = parser.parse_args()
-    csv_path = ROOT/'Output/Result/result.csv'
-    with csv_path.open(encoding='utf-8-sig', newline='') as stream:
-        rows = list(csv.DictReader(stream))
+    result_dir = ROOT/'Output/Result'
+    rows = read_class_results(result_dir)
     if not rows or any(row['mapping_status'] != 'demo_random' for row in rows):
         raise ValueError('The current ROV outputs have no demonstration 3D positions')
     seeds = {int(row['mapping_seed']) for row in rows}
@@ -40,14 +40,11 @@ def main():
         raise ValueError('Expected one mapping seed in the final CSV')
     model_path = args.dam_model or ensure_dam_model()
     sampler = SpillwayWaterlineGridSampler(model_path, seed=seeds.pop())
-    sampler.prepare_frames({(csv_path.parent/row['source_image_path']).resolve() for row in rows})
+    sampler.prepare_frames({(result_dir/row['source_image_path']).resolve() for row in rows})
     mapping = sampler.summary()
     geometry = {(g['node_id'],g['mesh_id'],g['primitive_id']):g for g in sampler.geometries if not g['water']}
-    for kind in ['CRC', 'SPL']:
-        with (csv_path.parent/(kind+'_result.csv')).open(encoding='utf-8-sig', newline='') as stream:
-            if list(csv.DictReader(stream)) != [row for row in rows if row['damage_type'] == kind]:
-                raise ValueError('Per-class CSV differs from result.csv: '+kind)
     DIST.mkdir(parents=True, exist_ok=True)
+    (DIST/'result.csv').unlink(missing_ok=True)
     assets = DIST/'model'; assets.mkdir(exist_ok=True)
     model = read_json(sampler.path)
     for buffer in model['buffers']:
@@ -64,17 +61,16 @@ def main():
                buffer_uris=['model/'+b['uri'] for b in model['buffers']],images=textures+['model/white.png']))
     images = DIST/'images'; images.mkdir(exist_ok=True)
     records = []; copied = set(); source_hashes = {}
-    for name in ['result.csv','CRC_result.csv','SPL_result.csv']:
+    for name in ['CRC_result.csv','SPL_result.csv']:
         csv_path = ROOT/'Output/Result'/name
         source_hashes[str(csv_path.relative_to(ROOT))] = sha(csv_path)
         shutil.copy2(csv_path,DIST/csv_path.name)
-    csv_path=ROOT/'Output/Result/result.csv'
     for row in rows:
         kind=row['damage_type']
         if kind not in {'CRC','SPL'} or row['mapping_status']!='demo_random':
             raise ValueError('Unexpected final result class or position status')
-        source = (csv_path.parent/row['source_image_path']).resolve()
-        overlay = (csv_path.parent/row['overlay_path']).resolve()
+        source = (result_dir/row['source_image_path']).resolve()
+        overlay = (result_dir/row['overlay_path']).resolve()
         if ROOT not in source.parents or ROOT not in overlay.parents:
             raise ValueError('Image path escapes the ROV module')
         raw_preview = 'images/'+source.stem+'.jpg'
@@ -90,9 +86,12 @@ def main():
             preview.save(DIST/overlay_preview)
         source_hashes[str(overlay.relative_to(ROOT))] = sha(overlay)
         key = tuple(int(row[k]) for k in ['surface_node_id','surface_mesh_id','surface_primitive_id'])
-        if row['member_id']!=geometry[key]['member_id']:
-            raise ValueError('Member ID differs from the grid parent')
-        triangle = geometry[key]['triangles'][int(row['surface_triangle_id'])]
+        g = geometry[key]
+        expected = dict(grid_id=g['name'], grid_guid=g['guid'], member_id=g['member_id'],
+                        member_name=g['member_name'], member_node_id=str(g['member_node_id']))
+        if any(row[field] != value for field, value in expected.items()):
+            raise ValueError('CSV grid or member differs from the dam model: '+row['damage_id'])
+        triangle = g['triangles'][int(row['surface_triangle_id'])]
         normal = np.cross(triangle[1]-triangle[0],triangle[2]-triangle[0]);normal/=np.linalg.norm(normal)
         point = [float(row[k]) for k in ['world_center_x_m','world_center_y_m','world_center_z_m']]
         barycentric = np.asarray(json.loads(row['surface_barycentric_json']))
@@ -117,7 +116,8 @@ def main():
                   placement_scope=mapping['scope'],eligible_grid_ids=mapping['eligible_grid_ids'],
                   frame_group_count=mapping['frame_group_count'],frame_step_m=mapping['frame_step_m'],
                   grid_band_counts={b:sum(r['grid_band']==b for r in records) for b in ['waterline','lower']},
-                  primary_csv='result.csv',grid_and_member_ids_present=all(r['grid'] and r['member_id'] for r in records),
+                  result_csvs=['CRC_result.csv','SPL_result.csv'],
+                  grid_and_member_ids_present=all(r['grid'] and r['member_id'] for r in records),
                   external_asset_requests=False)
     write_json(DIST/'rov_results.json',dict(summary=metadata,records=records))
     for name in ['index.html','style.css']:

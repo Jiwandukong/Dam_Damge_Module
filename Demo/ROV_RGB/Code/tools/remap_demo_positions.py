@@ -52,8 +52,6 @@ def main():
     backup = args.work_dir/'Reports'/('position_remap_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
     backup.mkdir(parents=True)
     shutil.copy2(summary_path, backup/summary_path.name)
-    final_path=args.output/'Result/result.csv'
-    if final_path.exists():shutil.copy2(final_path,backup/final_path.name)
     for kind, path, fields, rows in tables:
         shutil.copy2(path, backup/path.name)
         for row in rows:

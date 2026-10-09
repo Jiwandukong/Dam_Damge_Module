@@ -1,4 +1,4 @@
-"""Write the final combined CSV and matching per-class CSVs."""
+"""Read and write the two final per-class damage CSVs."""
 from collections import Counter
 import csv
 from pathlib import Path
@@ -14,6 +14,25 @@ RESULT_COLUMNS = [
     'bbox_px_json', 'crop_origin_x_px', 'crop_origin_y_px', 'crop_size_px',
     'overlay_padding_px_json', 'result_origin',
 ] + POSITION_COLUMNS + MEMBER_COLUMNS
+
+
+def read_class_results(folder):
+    rows = []
+    columns = None
+    for kind in ['CRC', 'SPL']:
+        with (Path(folder)/(kind+'_result.csv')).open(encoding='utf-8-sig', newline='') as handle:
+            reader = csv.DictReader(handle)
+            if columns is None:
+                columns = reader.fieldnames
+            elif columns != reader.fieldnames:
+                raise ValueError('Per-class CSV schemas differ')
+            selected = list(reader)
+        if any(row['damage_type'] != kind for row in selected):
+            raise ValueError('Incorrect damage class in '+kind+'_result.csv')
+        rows.extend(selected)
+    if len({row['damage_id'] for row in rows}) != len(rows):
+        raise ValueError('Duplicate damage IDs across class CSVs')
+    return sorted(rows, key=lambda row: row['damage_id'])
 
 
 def write_results(output, rows, columns=RESULT_COLUMNS):
@@ -33,9 +52,8 @@ def write_results(output, rows, columns=RESULT_COLUMNS):
             raise ValueError('Demo result needs grid and member IDs: '+row['damage_id'])
     folder = Path(output)/'Result'
     folder.mkdir(parents=True, exist_ok=True)
-    exports = {'result.csv': rows}
-    exports.update({f'{kind}_result.csv': [r for r in rows if r['damage_type']==kind]
-                    for kind in ['CRC', 'SPL']})
+    exports = {f'{kind}_result.csv': [r for r in rows if r['damage_type']==kind]
+               for kind in ['CRC', 'SPL']}
     for name, selected in exports.items():
         temporary = folder/(name+'.new')
         with temporary.open('w', encoding='utf-8-sig', newline='') as handle:
@@ -43,6 +61,8 @@ def write_results(output, rows, columns=RESULT_COLUMNS):
             writer.writeheader(); writer.writerows(selected)
     for name in exports:
         (folder/(name+'.new')).replace(folder/name)
-    return dict(primary_csv=str((folder/'result.csv').resolve()),
+    (folder/'result.csv').unlink(missing_ok=True)
+    (folder/'result.csv.new').unlink(missing_ok=True)
+    return dict(csv_files=list(exports),
                 rows=len(rows), counts=dict(Counter(r['damage_type'] for r in rows)),
                 columns=list(columns), csv_sha256={name: sha(folder/name) for name in exports})
