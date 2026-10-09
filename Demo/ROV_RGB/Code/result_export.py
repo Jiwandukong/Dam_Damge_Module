@@ -2,24 +2,49 @@
 from collections import Counter
 import csv
 from pathlib import Path
-from demo_mapping import MEMBER_COLUMNS, POSITION_COLUMNS
-from paths import sha
+from paths import read_json, write_json, sha
 
 REMOVED_COLUMNS = frozenset({
     'mapping_status', 'measurement_status', 'frame_group_id', 'frame_group_index',
     'frame_group_size', 'frame_offset_x_m', 'member_id', 'member_node_id',
     'position_origin', 'grid_guid',
     'length_px', 'length_m', 'width_px', 'width_m', 'area_m2', 'area_px',
+    'source_image_path', 'overlay_path', 'pixel_center_x_px', 'pixel_center_y_px',
+    'bbox_px_json', 'crop_origin_x_px', 'crop_origin_y_px', 'crop_size_px',
+    'overlay_padding_px_json', 'result_origin', 'mapping_seed', 'water_level_m',
+    'submergence_m', 'surface_node_id', 'surface_mesh_id', 'surface_primitive_id',
+    'surface_triangle_id', 'surface_barycentric_json',
 })
 
-RESULT_COLUMNS = [name for name in [
+DETAIL_COLUMNS = REMOVED_COLUMNS-{'length_px', 'length_m', 'width_px', 'width_m', 'area_m2', 'area_px'}
+DETAILS_FILE = 'result_details.json'
+
+RESULT_COLUMNS = [
     'image', 'damage_id', 'damage_type', 'damage_name_ko', 'pixel_nodes_json',
     'world_center_x_m', 'world_center_y_m', 'world_center_z_m', 'member_name', 'section_name',
-    'grid_id', 'grid_guid', 'DRI', 'source_image_path', 'overlay_path',
-    'mapping_status', 'measurement_status', 'pixel_center_x_px', 'pixel_center_y_px',
-    'bbox_px_json', 'crop_origin_x_px', 'crop_origin_y_px', 'crop_size_px',
-    'overlay_padding_px_json', 'result_origin',
-] + POSITION_COLUMNS + MEMBER_COLUMNS if name not in REMOVED_COLUMNS]
+    'grid_id', 'DRI', 'surface_local_x_m',
+]
+
+
+def read_result_details(work_dir, rows):
+    """Merge processing details into CSV rows for internal tools only."""
+    path = Path(work_dir)/DETAILS_FILE
+    if not path.exists():
+        # Support earlier CSVs that still contain their processing details.
+        legacy = {'source_image_path', 'overlay_path', 'pixel_center_x_px', 'pixel_center_y_px'}
+        if all(legacy.issubset(row) for row in rows):
+            return [dict(row) for row in rows]
+        raise FileNotFoundError('Regenerate inference to create processing details: '+str(path))
+    record = read_json(path)
+    if record['version'] != 1:
+        raise ValueError('Unsupported result details version')
+    merged = []
+    for row in rows:
+        details = record['details'][row['damage_id']]
+        if set(details)-DETAIL_COLUMNS:
+            raise ValueError('Unexpected field in internal result details')
+        merged.append(dict(details, **row))
+    return merged
 
 
 def read_class_results(folder):
@@ -41,7 +66,7 @@ def read_class_results(folder):
     return sorted(rows, key=lambda row: row['damage_id'])
 
 
-def write_results(output, rows, columns=RESULT_COLUMNS):
+def write_results(output, rows, columns=RESULT_COLUMNS, *, work_dir=None):
     columns = [name for name in columns if name not in REMOVED_COLUMNS]
     rows = sorted(rows, key=lambda r: r['damage_id'])
     if len({r['damage_id'] for r in rows}) != len(rows):
@@ -72,6 +97,13 @@ def write_results(output, rows, columns=RESULT_COLUMNS):
         (folder/(name+'.new')).replace(folder/name)
     (folder/'result.csv').unlink(missing_ok=True)
     (folder/'result.csv.new').unlink(missing_ok=True)
-    return dict(csv_files=list(exports),
+    result = dict(csv_files=list(exports),
                 rows=len(rows), counts=dict(Counter(r['damage_type'] for r in rows)),
                 columns=list(columns), csv_sha256={name: sha(folder/name) for name in exports})
+    if work_dir is not None:
+        path = Path(work_dir)/DETAILS_FILE
+        details = {row['damage_id']: {name: row[name] for name in sorted(DETAIL_COLUMNS) if name in row}
+                   for row in rows}
+        write_json(path, dict(version=1, details=details))
+        result.update(details_file=DETAILS_FILE, details_sha256=sha(path))
+    return result

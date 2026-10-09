@@ -10,7 +10,7 @@ from datetime import datetime
 import json
 import shutil
 from demo_mapping import MEMBER_COLUMNS, POSITION_COLUMNS, SpillwayWaterlineGridSampler
-from result_export import REMOVED_COLUMNS, write_results
+from result_export import DETAILS_FILE, REMOVED_COLUMNS, read_result_details, write_results
 from paths import ROOT, WORK, read_json, write_json, sha
 
 
@@ -34,6 +34,7 @@ def main():
         before_hashes[kind] = sha(path)
         with path.open(encoding='utf-8-sig', newline='') as handle:
             reader = csv.DictReader(handle); fields = list(reader.fieldnames); rows = list(reader)
+        rows = read_result_details(args.work_dir, rows)
         for field in POSITION_COLUMNS+MEMBER_COLUMNS:
             if field not in REMOVED_COLUMNS and field not in fields:
                 fields.append(field)
@@ -52,6 +53,8 @@ def main():
     backup = args.work_dir/'Reports'/('position_remap_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
     backup.mkdir(parents=True)
     shutil.copy2(summary_path, backup/summary_path.name)
+    details_path = args.work_dir/DETAILS_FILE
+    if details_path.exists():shutil.copy2(details_path, backup/DETAILS_FILE)
     for kind, path, fields, rows in tables:
         shutil.copy2(path, backup/path.name)
         for row in rows:
@@ -60,7 +63,7 @@ def main():
             assert all(row[k] == value for k, value in previous.items() if k not in position_fields)
     # Compute all positions before replacing either CSV.
     assert tables[0][2]==tables[1][2], 'Per-class CSV schemas differ'
-    summary['final_result']=write_results(args.output,[r for _,_,_,rows in tables for r in rows],columns=tables[0][2])
+    summary['final_result']=write_results(args.output,[r for _,_,_,rows in tables for r in rows],columns=tables[0][2],work_dir=args.work_dir)
     summary['demo_mapping'] = sampler.summary()
     summary['mapping_status'] = 'demo_random'
     write_json(summary_path, summary)
