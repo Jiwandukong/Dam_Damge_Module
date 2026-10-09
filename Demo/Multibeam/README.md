@@ -109,22 +109,6 @@ python3 Code/download_assets.py --scope results
 
 배포된 CSV에는 격자 ID·부재 ID·부재 이름이 포함되어 있습니다.
 
-## 3D 스냅샷 다시 생성
-
-기존 LAS와 CSV로 3D PNG만 다시 만들 수 있습니다. 손상 검출과 LAS 추출은 다시 수행하지 않습니다.
-
-```bash
-python3 Code/visualize_results.py
-```
-
-SC는 `Data`의 원본 LAS가 있으면 주변 관측점도 함께 표시합니다. DP의 주변 관측점을 함께 표시하려면 기존 분석 중간 결과의 슬래브 LAS를 지정합니다.
-
-```bash
-python3 Code/visualize_results.py --slab-source /path/to/slab.las
-```
-
-원본 분석을 실행하면 SC·DP의 주변 관측점까지 포함한 3D 스냅샷을 자동 생성합니다. 이미지 경로는 CSV의 `visualization_path`에 저장합니다.
-
 ## 원본에서 실행
 
 Python 3.13 환경에서 실행합니다.
