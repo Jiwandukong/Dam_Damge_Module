@@ -164,7 +164,7 @@ def make_visualization(feature, staging):
     ax.set_proj_type("ortho")
     ax.set_axis_off()
     zoom = fit_camera(fig, ax, span, cloud, context)
-    destination = Path(staging) / f"Visualiza/{feature['kind']}/{feature['id']}.png"
+    destination = Path(staging) / f"Visualize/{feature['kind']}/{feature['id']}.png"
     destination.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(destination, facecolor=BACKGROUND)
     plt.close(fig)
@@ -179,7 +179,7 @@ def make_visualization(feature, staging):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="기존 손상 LAS → Visualiza 3D 스냅샷; 재검출하지 않음")
+    parser = argparse.ArgumentParser(description="기존 손상 LAS → Visualize 3D 스냅샷; 재검출하지 않음")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "Output")
     parser.add_argument("--work-dir", type=Path, default=Path(os.environ.get("MULTIBEAM_WORK_DIR", DEFAULT_WORK)))
     parser.add_argument("--slab-source", type=Path, help="DP 주변 관측점으로 사용할 원본 슬래브 LAS (선택)")
@@ -201,7 +201,7 @@ def main():
             for name in REMOVED_CSV_FIELDS:
                 row.pop(name, None)
             row.pop("overlay_path", None)
-            row["visualization_path"] = f"../Visualiza/{kind}/{row['damage_id']}.png"
+            row["visualization_path"] = f"../Visualize/{kind}/{row['damage_id']}.png"
             geometry = shape(json.loads(row["boundary_xy_json"]))
             west, south, east, north = geometry.bounds
             margin = max(2.0, max(east - west, north - south) * 0.15)

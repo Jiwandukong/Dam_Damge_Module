@@ -293,7 +293,7 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
     staging_root.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=source_input.stem + "_", dir=staging_root) as temp:
         staging = Path(temp)
-        for category in ("Result", "Visualiza"):
+        for category in ("Result", "Visualize"):
             for kind in ("SC", "DP"):
                 (staging / category / kind).mkdir(parents=True)
         print("Extracting observed scour points from raw LAS...", flush=True)
@@ -322,7 +322,7 @@ def export_results(results, source_input, las_source=None, output=None, work=Non
                 "volume_loss_m3": feature["volume"], "point_count": feature["point_count"],
                 "source_data_path": os.path.relpath(source_input, output / "Result"),
                 "pointcloud_path": f"{feature['kind']}/{feature['id']}.las",
-                "visualization_path": f"../Visualiza/{feature['kind']}/{feature['id']}.png",
+                "visualization_path": f"../Visualize/{feature['kind']}/{feature['id']}.png",
                 "boundary_xy_json": json.dumps(shapely.geometry.mapping(feature["geometry"]), separators=(",", ":")),
             })
             print(f"{feature['id']}: {feature['point_count']:,} measured points; 3D PNG rendered", flush=True)
