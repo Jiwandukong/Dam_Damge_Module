@@ -607,26 +607,24 @@ def surface_measurement_from_hits(
             gsd_area = candidate_area
 
     is_crack = int(instance_row.get("class_id", -1)) == 1
-    valid = (
-        gsd_length is not None and gsd_width is not None
-        if is_crack
-        else gsd_area is not None
-    )
+    valid = gsd_area is not None
     missing: list[str] = []
     if gsd_length is None:
         missing.append("length_axis_mesh_hits_invalid")
     if gsd_width is None:
         missing.append("width_axis_mesh_hits_invalid")
-    if not is_crack and gsd_area is None and not missing:
+    if gsd_area is None and not missing:
         missing.append("surface_jacobian_area_invalid")
 
     length_px = float(geometry.length_px) if is_crack else None
     width_px = float(geometry.width_px) if is_crack else None
     length_m = length_px * gsd_length if length_px is not None and gsd_length is not None else None
     width_m = width_px * gsd_width if width_px is not None and gsd_width is not None else None
+    # Use the predicted mask's pixel count for every class, including cracks.
+    # The enclosing rectangle's length * width includes background pixels.
     area_m2 = (
         float(instance_row["area_px"]) * gsd_area
-        if not is_crack and gsd_area is not None
+        if gsd_area is not None
         else None
     )
     schemes = {stencil.length_scheme, stencil.width_scheme}
