@@ -19,9 +19,11 @@ FIELDS = [
     'crs', 'grid_id', 'grid_guid', 'member_name', 'mapping_status',
     'coordinate_frame',
     'area_m2', 'mean_depth_m', 'p95_depth_m', 'max_depth_m', 'point_count',
-    'source_data_path', 'pointcloud_path', 'visualization_path',
+    'member_guid', 'nearest_grid_distance_m', 'nearest_member_distance_m',
+    'mapping_max_distance_m', 'grid_area_m2', 'grid_damage_area_m2',
+    'grid_damage_ratio_pct', 'mapped_area_m2', 'unmapped_area_m2', 'mapped_grid_count',
+    'source_data_path', 'registered_data_path', 'pointcloud_path', 'visualization_path',
 ]
-
 
 def result_row(part, row, xyz, source_ids, data_dir, output):
     """Use the observed candidate centroid as the sole exported XYZ triplet."""
@@ -37,6 +39,11 @@ def result_row(part, row, xyz, source_ids, data_dir, output):
         'p95_depth_m': row['p95_depth_m'], 'max_depth_m': row['max_depth_m'],
         'point_count': len(source_ids),
         'source_data_path': os.path.relpath(data_dir/(part+'.e57'), output/'Result').replace(os.sep, '/'),
+        **{key: '' for key in FIELDS if key in {
+            'member_guid', 'nearest_grid_distance_m', 'nearest_member_distance_m',
+            'mapping_max_distance_m', 'grid_area_m2', 'grid_damage_area_m2',
+            'grid_damage_ratio_pct', 'mapped_area_m2', 'unmapped_area_m2',
+            'mapped_grid_count', 'registered_data_path'}},
         'pointcloud_path': 'SPL/'+damage_id+'.las',
         'visualization_path': '../Visualize/SPL/'+damage_id+'.png',
     }
@@ -61,7 +68,7 @@ def write_las(path, xyz, rgb, depth, candidate_id, source_ids):
     cloud.write(path)
 
 
-def snapshot(path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg):
+def snapshot(path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg, registered=False):
     """Show the original surface, selected returns and the existing reference."""
     rng = np.random.default_rng(cfg['random_seed']+int(row['candidate_id']))
     shown = context if len(context) <= 40000 else rng.choice(context, 40000, replace=False)
@@ -108,14 +115,26 @@ def snapshot(path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, su
     view.yaxis.labelpad = 12
     figure.colorbar(colored, ax=view, shrink=.6, pad=.08, label='Inward depth (mm)')
     figure.suptitle(f'{damage_id} | geometric spalling candidate | {row["covered_area_m2"]:.3f} m²', fontsize=20)
+    coordinate_note = 'Geometry: original E57; location: registered E57.' if registered else 'TLS local coordinates.'
     figure.supxlabel(f'{len(source_ids):,} original points | cell mean depth {row["mean_depth_m"]*1000:.1f} mm | '
-                       'Candidate status; manual verification required. TLS local coordinates.', fontsize=11)
+                       'Candidate status; manual verification required. '+coordinate_note, fontsize=11)
     figure.savefig(path, dpi=240)
     plt.close(figure)
 
 
 def export_results(cfg, intermediate, data_dir, output):
     final_rows = []
+    grid_allocation_count = 0
+    mapping_cfg = cfg.get('mapping', {})
+    mapper = None
+    registration_info = {}
+    if mapping_cfg.get('enabled', False):
+        from model_mapping import ModelMapper
+        from registered_source import load_registered, candidate_cell_positions
+        mapping_root = Path(__file__).resolve().parents[1]
+        mapper = ModelMapper(mapping_root/mapping_cfg['model_path'],
+                             mapping_cfg['maximum_distance_m'], mapping_cfg['grid_area_m2'])
+        print(f'MAPPING: {len(mapper.grids)} Grids; {len(mapper.members)} members; cutoff {mapper.maximum_distance:.2f}m', flush=True)
     # Complete the export in the external work directory before replacing final files.
     with tempfile.TemporaryDirectory(prefix='export-', dir=runtime.WORK) as temporary:
         stage = Path(temporary)
@@ -124,12 +143,13 @@ def export_results(cfg, intermediate, data_dir, output):
         for part in cfg['parts']:
             folder = intermediate/part
             summary = json.loads((folder/'summary.json').read_text())
-            xyz, rgb, _, source_hash = load_source(part, data_dir)
+            xyz, rgb, intensity, source_hash = load_source(part, data_dir)
             if source_hash != summary['source_sha256']:
                 raise ValueError(f'{part}: source changed; rerun detection without --export-only')
             with np.load(folder/'point_candidates.npz') as saved:
                 candidate = saved['candidate_id']; depth = saved['depth_m']
                 basis = saved['frame_basis']; centre = saved['frame_center_xyz']
+                point_cell = saved['point_cell'] if mapper else None
                 assert not bool(saved['labels_are_ground_truth'])
             if len(candidate) != len(xyz):
                 raise ValueError(f'{part}: cached point count differs from source')
@@ -138,6 +158,14 @@ def export_results(cfg, intermediate, data_dir, output):
                 surface = {key: saved[key] for key in saved.files}
             with (folder/'candidates.csv').open(encoding='utf-8-sig') as stream:
                 rows = list(csv.DictReader(stream))
+            positions = xyz
+            if mapper:
+                registered_path = (mapping_root/mapping_cfg['registered_files'][part]).resolve()
+                positions, registration_info[part] = load_registered(part, registered_path, xyz, rgb, intensity)
+                regular_ids = [int(row['candidate_id']) for row in rows if row['status'] == 'spalling_candidate']
+                cell_ids, cell_positions, cell_areas, cell_depths = candidate_cell_positions(
+                    surface, point_cell, positions, regular_ids)
+                cell_regions = surface['region_id'].ravel()[cell_ids]
             for raw in rows:
                 if raw['status'] != 'spalling_candidate':
                     continue
@@ -151,7 +179,7 @@ def export_results(cfg, intermediate, data_dir, output):
                     raise ValueError(f'Unexpected damage ID: {damage_id}')
                 las_path = Path('Result/SPL')/(damage_id+'.las')
                 png_path = Path('Visualize/SPL')/(damage_id+'.png')
-                write_las(stage/las_path, xyz[source_ids], rgb[source_ids], depth[source_ids],
+                write_las(stage/las_path, positions[source_ids], rgb[source_ids], depth[source_ids],
                           int(row['candidate_id']), source_ids)
                 lower = uvw[source_ids, :2].min(axis=0)-.4
                 upper = uvw[source_ids, :2].max(axis=0)+.4
@@ -159,11 +187,53 @@ def export_results(cfg, intermediate, data_dir, output):
                     (uvw[:, 0] >= lower[0]) & (uvw[:, 0] <= upper[0]) &
                     (uvw[:, 1] >= lower[1]) & (uvw[:, 1] <= upper[1]) &
                     (np.abs(uvw[:, 2]-np.median(uvw[source_ids, 2])) < cfg['global_normal_distance_limit_m']))
-                snapshot(stage/png_path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg)
-                final_rows.append(result_row(part, row, xyz, source_ids, data_dir, output))
+                snapshot(stage/png_path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg,
+                         registered=mapper is not None)
+                result = result_row(part, row, positions, source_ids, data_dir, output)
+                if mapper:
+                    selected = cell_regions == int(row['candidate_id'])
+                    allocations, unmapped = mapper.map_cells(part, damage_id, cell_positions[selected],
+                                                            cell_areas[selected], cell_depths[selected])
+                    mapped = sum(entry['grid_damage_area_m2'] for entry in allocations)
+                    if not np.isclose(mapped+unmapped, float(row['covered_area_m2']), atol=1e-10, rtol=0):
+                        raise ValueError(f'{damage_id}: Grid allocations do not conserve damage area')
+                    center = positions[source_ids].mean(axis=0)
+                    result.update(mapper.map_center(center), coordinate_frame='Dam_model_Z_up_XYZ',
+                                  mapped_area_m2=mapped, unmapped_area_m2=unmapped,
+                                  mapped_grid_count=len(allocations),
+                                  registered_data_path=os.path.relpath(registered_path, output/'Result').replace(os.sep, '/'))
+                    if allocations:
+                        primary = next((entry for entry in allocations if entry['grid_id'] == result['grid_id']), None)
+                        if primary is None and not result['grid_id']:
+                            primary = max(allocations, key=lambda entry: entry['grid_damage_area_m2'])
+                            result.update({key:primary[key] for key in ('grid_id','grid_guid','member_name','member_guid','grid_area_m2')})
+                            result['mapping_status'] = 'partially_mapped_cells'
+                        if primary:
+                            result.update({key:primary[key] for key in ('grid_damage_area_m2','grid_damage_ratio_pct')})
+                        else:
+                            result.update(grid_damage_area_m2=0., grid_damage_ratio_pct=0.)
+                        if unmapped > 1e-10 and result['mapping_status'] == 'mapped':
+                            result['mapping_status'] = 'partially_mapped'
+                    elif result['grid_id']:
+                        result.update(grid_damage_area_m2=0., grid_damage_ratio_pct=0.,
+                                      mapping_status='center_only_no_cells_within_distance')
+                    grid_allocation_count += len(allocations)
+                final_rows.append(result)
                 print(f'EXPORT {damage_id}: {len(source_ids):,} points', flush=True)
         final_rows.sort(key=lambda row: row['damage_id'])
         write_csv(stage/'Result/SPL_result.csv', final_rows, FIELDS)
+        if mapper:
+            (intermediate/'mapping_summary.json').write_text(json.dumps({
+                'model':str(mapper.path.resolve()), 'method':'nearest_point_to_filled_triangle',
+                'grid_count':len(mapper.grids), 'member_count':len(mapper.members),
+                'maximum_distance_m':mapper.maximum_distance, 'nominal_grid_area_m2':mapper.grid_area,
+                'registration':registration_info, 'damage_rows':len(final_rows),
+                'grid_allocations':grid_allocation_count,
+                'mapped_damage_count':sum(bool(row['grid_id']) for row in final_rows),
+                'member_mapped_damage_count':sum(bool(row['member_name']) for row in final_rows),
+                'mapped_area_m2':sum(row['mapped_area_m2'] for row in final_rows),
+                'unmapped_area_m2':sum(row['unmapped_area_m2'] for row in final_rows)},
+                ensure_ascii=False, indent=2)+'\n')
         old_csv = output/'Result/SPL_result.csv'
         old_ids = set()
         if old_csv.exists():
@@ -177,6 +247,10 @@ def export_results(cfg, intermediate, data_dir, output):
             pending = target.with_suffix(target.suffix+'.tmp')
             shutil.copy2(source, pending)
             pending.replace(target)
+        if (output/'Result/SPL_grid_result.csv').exists():
+            retired = runtime.WORK/'retired_exports/Result/SPL_grid_result.csv'
+            retired.parent.mkdir(parents=True, exist_ok=True)
+            (output/'Result/SPL_grid_result.csv').replace(retired)
         # Retire only previously exported owned files; keep unrelated user files.
         for damage_id in old_ids-{row['damage_id'] for row in final_rows}:
             if not re.fullmatch(r'TLS[12]-\d{4}', damage_id):

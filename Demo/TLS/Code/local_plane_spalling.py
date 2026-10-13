@@ -372,14 +372,14 @@ def run_part(part,cfg,out,data_dir=None):
         plane_rows.append(p)
     write_csv(folder/'candidates.csv',regions)
     write_csv(folder/'reference_planes.csv',plane_rows,fields=list(plane_rows[0]) if plane_rows else ['plane_id'])
-    np.savez_compressed(folder/'point_candidates.npz',source_vertex_id=np.arange(len(xyz),dtype=np.uint32),
+    np.savez_compressed(folder/'point_candidates.npz',source_vertex_id=np.arange(len(xyz),dtype=np.uint32),point_cell=grid['point_cell'],
                         depth_m=depth,candidate_id=candidate,frame_center_xyz=center,frame_basis=basis,
                         labels_are_ground_truth=np.array(False))
     np.savez_compressed(folder/'surface_grid.npz',measured_w=grid['z'].astype(np.float32),point_counts=grid['counts'],
                         reference_w=reference['prediction'].astype(np.float32),depth_m=reference['depth'].astype(np.float32),
                         threshold_m=reference['threshold'].astype(np.float32),supports=reference['support'],
                         region_id=region_map,valid_reference=reference['good'],reference_disagreement_m=reference['disagreement'].astype(np.float32),uv_origin=grid['uv_origin'],
-                        resolution_m=cfg['grid_resolution_m'],frame_center_xyz=center,frame_basis=basis)
+                        resolution_m=cfg['grid_resolution_m'],surface_area_factor=reference['factor'],frame_center_xyz=center,frame_basis=basis)
     write_candidate_ply(folder/'candidate_points.ply',xyz,rgb,depth,candidate)
     sensitivity = []
     for threshold in [.015,.02,.025,.03,.04,.05]:

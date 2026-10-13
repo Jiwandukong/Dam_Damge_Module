@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Original E57 → local-plane candidates → CSV, LAS and PNG deliverables."""
+"""Original E57 geometry + registered positions → candidates and mapped outputs."""
 import argparse
 import json
 import os

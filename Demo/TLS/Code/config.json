@@ -29,5 +29,15 @@
   "minimum_shallow_surrounding_fraction": 0.65,
   "joint_like_aspect_ratio": 6.0,
   "broad_region_area_m2": 2.0,
-  "random_seed": 20261012
+  "random_seed": 20261012,
+  "mapping": {
+    "enabled": true,
+    "model_path": "Data/Model/daecheongdam_regions_grid5m.gltf",
+    "registered_files": {
+      "dacheung_part1": "Data/Registered/regist_part1.e57",
+      "dachung_part2": "Data/Registered/regist_part2.e57"
+    },
+    "maximum_distance_m": 1.0,
+    "grid_area_m2": 25.0
+  }
 }
