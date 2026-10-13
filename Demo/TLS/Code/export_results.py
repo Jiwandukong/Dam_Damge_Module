@@ -17,10 +17,29 @@ FIELDS = [
     'dataset', 'damage_id', 'source_damage_id', 'damage_type', 'damage_name_ko',
     'detection_status', 'world_center_x_m', 'world_center_y_m', 'world_center_z_m',
     'crs', 'grid_id', 'grid_guid', 'member_name', 'mapping_status',
-    'local_center_x_m', 'local_center_y_m', 'local_center_z_m', 'coordinate_frame',
+    'coordinate_frame',
     'area_m2', 'mean_depth_m', 'p95_depth_m', 'max_depth_m', 'point_count',
     'source_data_path', 'pointcloud_path', 'visualization_path',
 ]
+
+
+def result_row(part, row, xyz, source_ids, data_dir, output):
+    """Use the observed candidate centroid as the sole exported XYZ triplet."""
+    centre = np.mean(xyz[source_ids], axis=0)
+    damage_id = row['damage_id']
+    return {
+        'dataset': part, 'damage_id': damage_id, 'source_damage_id': int(row['candidate_id']),
+        'damage_type': 'SPL', 'damage_name_ko': '박락 후보', 'detection_status': row['status'],
+        **{'world_center_'+axis+'_m': float(value) for axis, value in zip('xyz', centre)},
+        'crs': '', 'grid_id': '', 'grid_guid': '', 'member_name': '',
+        'mapping_status': 'unregistered', 'coordinate_frame': 'source_E57_local',
+        'area_m2': row['covered_area_m2'], 'mean_depth_m': row['mean_depth_m'],
+        'p95_depth_m': row['p95_depth_m'], 'max_depth_m': row['max_depth_m'],
+        'point_count': len(source_ids),
+        'source_data_path': os.path.relpath(data_dir/(part+'.e57'), output/'Result').replace(os.sep, '/'),
+        'pointcloud_path': 'SPL/'+damage_id+'.las',
+        'visualization_path': '../Visualize/SPL/'+damage_id+'.png',
+    }
 
 
 def write_las(path, xyz, rgb, depth, candidate_id, source_ids):
@@ -141,20 +160,7 @@ def export_results(cfg, intermediate, data_dir, output):
                     (uvw[:, 1] >= lower[1]) & (uvw[:, 1] <= upper[1]) &
                     (np.abs(uvw[:, 2]-np.median(uvw[source_ids, 2])) < cfg['global_normal_distance_limit_m']))
                 snapshot(stage/png_path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg)
-                final_rows.append({
-                    'dataset': part, 'damage_id': damage_id, 'source_damage_id': int(row['candidate_id']),
-                    'damage_type': 'SPL', 'damage_name_ko': '박락 후보', 'detection_status': row['status'],
-                    'world_center_x_m': '', 'world_center_y_m': '', 'world_center_z_m': '',
-                    'crs': '', 'grid_id': '', 'grid_guid': '', 'member_name': '',
-                    'mapping_status': 'unregistered',
-                    **{'local_center_'+axis+'_m': row['center_surface_'+axis+'_m'] for axis in 'xyz'},
-                    'coordinate_frame': 'source_E57_local', 'area_m2': row['covered_area_m2'],
-                    'mean_depth_m': row['mean_depth_m'], 'p95_depth_m': row['p95_depth_m'],
-                    'max_depth_m': row['max_depth_m'], 'point_count': len(source_ids),
-                    'source_data_path': os.path.relpath(data_dir/(part+'.e57'), output/'Result').replace(os.sep, '/'),
-                    'pointcloud_path': 'SPL/'+damage_id+'.las',
-                    'visualization_path': '../Visualize/SPL/'+damage_id+'.png',
-                })
+                final_rows.append(result_row(part, row, xyz, source_ids, data_dir, output))
                 print(f'EXPORT {damage_id}: {len(source_ids):,} points', flush=True)
         final_rows.sort(key=lambda row: row['damage_id'])
         write_csv(stage/'Result/SPL_result.csv', final_rows, FIELDS)

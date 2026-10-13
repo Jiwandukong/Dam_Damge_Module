@@ -69,9 +69,9 @@ CSV는 UTF-8 BOM 인코딩이며 경로는 `Output/Result` 기준입니다.
 | `dataset` | 원본 E57 이름에서 확장자를 제외한 값 |
 | `damage_id`, `source_damage_id` | 기존 후보 ID, 해당 Part 내부의 영역 번호 |
 | `damage_type`, `damage_name_ko`, `detection_status` | `SPL`, 박락 후보, `spalling_candidate` |
-| `local_center_x_m`, `local_center_y_m`, `local_center_z_m` | 원본 E57 좌표계의 후보 표면 대표점(m) |
+| `world_center_x_m`, `world_center_y_m`, `world_center_z_m` | 개별 후보를 구성하는 원본 관측점 XYZ의 산술평균 중심점(m). 후보 LAS와 동일한 원본 E57 좌표계 |
 | `coordinate_frame` | `source_E57_local` |
-| `world_center_x_m`, `world_center_y_m`, `world_center_z_m`, `crs` | 모델 좌표 정합 후 입력할 값. 현재 빈값 |
+| `crs` | 확인된 EPSG 코드가 없어 현재 빈값 |
 | `grid_id`, `grid_guid`, `member_name` | 모델 격자·부재 연결 정보. 현재 빈값 |
 | `mapping_status` | 현재 `unregistered`: TLS와 모델의 좌표 정합 필요 |
 | `area_m2` | 후보 셀의 추정 표면 면적(m²) |
@@ -79,7 +79,7 @@ CSV는 UTF-8 BOM 인코딩이며 경로는 `Output/Result` 기준입니다.
 | `point_count` | 후보 LAS의 관측점 수 |
 | `source_data_path`, `pointcloud_path`, `visualization_path` | 원본 E57, 후보 LAS, 후보 PNG의 상대경로 |
 
-원본 TLS에는 모델의 좌표 기준·정합 변환이 없으므로 현재 로컬 좌표를 모델의 월드 좌표나 EPSG:5186으로 표시하지 않습니다. 모델의 격자·부재 매핑은 공통 기준점 등으로 좌표를 정합한 후 수행해야 합니다.
+CSV의 3차원 위치는 `world_center_x_m`, `world_center_y_m`, `world_center_z_m` 세 컬럼으로 제공합니다. 각 값은 해당 후보의 실제 관측점 중심이며, 좌표 기준은 `daechung_1.e57`에 스캔별 변환을 적용한 원본 점군의 공통 좌표계입니다. `world_center_*`라는 컬럼명은 센서별 산출물의 공통 형식이며, 현재 값에 EPSG:5186 변환이나 댐 모델 정합을 적용한 것은 아닙니다. 모델의 격자·부재 매핑은 공통 기준점 등으로 좌표를 정합한 후 수행해야 합니다.
 
 ## 실행
 
