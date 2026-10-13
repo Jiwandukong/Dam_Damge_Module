@@ -16,3 +16,8 @@ Demo/UAV_RGB/Output/Result/*.csv -text
 Demo/Multibeam/Output/Result/*.csv -text -whitespace
 Demo/Multibeam/Code/algorithms/*.py -text -whitespace
 Demo/Multibeam/Output/Result/**/*.las binary
+
+# TLS original scans and candidate deliverables
+Demo/TLS/Data/*.e57 binary
+Demo/TLS/Output/Result/**/*.las binary
+Demo/TLS/Output/Result/*.csv -text -whitespace
