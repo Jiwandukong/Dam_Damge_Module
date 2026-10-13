@@ -10,19 +10,15 @@ from pathlib import Path
 import runtime
 import laspy
 import numpy as np
-import matplotlib.pyplot as plt
 from local_plane_spalling import load_source, write_csv
+from visualize_results import snapshot
 
 FIELDS = [
     'dataset', 'damage_id', 'source_damage_id', 'damage_type', 'damage_name_ko',
-    'detection_status', 'world_center_x_m', 'world_center_y_m', 'world_center_z_m',
-    'crs', 'grid_id', 'grid_guid', 'member_name', 'mapping_status',
-    'coordinate_frame',
-    'area_m2', 'mean_depth_m', 'p95_depth_m', 'max_depth_m', 'point_count',
-    'member_guid', 'nearest_grid_distance_m', 'nearest_member_distance_m',
-    'mapping_max_distance_m', 'grid_area_m2', 'grid_damage_area_m2',
-    'grid_damage_ratio_pct', 'mapped_area_m2', 'unmapped_area_m2', 'mapped_grid_count',
-    'source_data_path', 'registered_data_path', 'pointcloud_path', 'visualization_path',
+    'world_center_x_m', 'world_center_y_m', 'world_center_z_m',
+    'grid_id', 'member_name', 'area_m2', 'mean_depth_m', 'point_count',
+    'grid_area_m2', 'grid_damage_area_m2', 'grid_damage_ratio_pct', 'mapped_grid_count',
+    'registered_data_path', 'pointcloud_path', 'visualization_path',
 ]
 
 def result_row(part, row, xyz, source_ids, data_dir, output):
@@ -31,18 +27,13 @@ def result_row(part, row, xyz, source_ids, data_dir, output):
     damage_id = row['damage_id']
     return {
         'dataset': part, 'damage_id': damage_id, 'source_damage_id': int(row['candidate_id']),
-        'damage_type': 'SPL', 'damage_name_ko': '박락 후보', 'detection_status': row['status'],
+        'damage_type': 'SPL', 'damage_name_ko': '박락',
         **{'world_center_'+axis+'_m': float(value) for axis, value in zip('xyz', centre)},
-        'crs': '', 'grid_id': '', 'grid_guid': '', 'member_name': '',
-        'mapping_status': 'unregistered', 'coordinate_frame': 'source_E57_local',
+        'grid_id': '', 'member_name': '',
         'area_m2': row['covered_area_m2'], 'mean_depth_m': row['mean_depth_m'],
-        'p95_depth_m': row['p95_depth_m'], 'max_depth_m': row['max_depth_m'],
         'point_count': len(source_ids),
-        'source_data_path': os.path.relpath(data_dir/(part+'.e57'), output/'Result').replace(os.sep, '/'),
         **{key: '' for key in FIELDS if key in {
-            'member_guid', 'nearest_grid_distance_m', 'nearest_member_distance_m',
-            'mapping_max_distance_m', 'grid_area_m2', 'grid_damage_area_m2',
-            'grid_damage_ratio_pct', 'mapped_area_m2', 'unmapped_area_m2',
+            'grid_area_m2', 'grid_damage_area_m2', 'grid_damage_ratio_pct',
             'mapped_grid_count', 'registered_data_path'}},
         'pointcloud_path': 'SPL/'+damage_id+'.las',
         'visualization_path': '../Visualize/SPL/'+damage_id+'.png',
@@ -66,60 +57,6 @@ def write_las(path, xyz, rgb, depth, candidate_id, source_ids):
     cloud['candidate_id'] = np.full(len(xyz), candidate_id, dtype=np.int32)
     cloud['source_vertex_id'] = source_ids.astype(np.uint32)
     cloud.write(path)
-
-
-def snapshot(path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg, registered=False):
-    """Show the original surface, selected returns and the existing reference."""
-    rng = np.random.default_rng(cfg['random_seed']+int(row['candidate_id']))
-    shown = context if len(context) <= 40000 else rng.choice(context, 40000, replace=False)
-    selected = source_ids if len(source_ids) <= 30000 else rng.choice(source_ids, 30000, replace=False)
-    figure = plt.figure(figsize=(16, 9), dpi=240, layout='constrained')
-    front = figure.add_subplot(1, 2, 1)
-    front.scatter(uvw[shown, 0], uvw[shown, 1], c=rgb[shown]/255, s=2, linewidths=0)
-    front.scatter(uvw[selected, 0], uvw[selected, 1], c='#ed4444', s=3, linewidths=0)
-    front.set(title='Original RGB / red: selected candidate points', xlabel='Surface U (m)',
-              ylabel='Surface V (m)', aspect='equal')
-    front.grid(alpha=.15)
-
-    view = figure.add_subplot(1, 2, 2, projection='3d')
-    # The surface frame is orthonormal; no depth exaggeration or noise is applied.
-    centre = np.mean(uvw[source_ids], axis=0)
-    relative = uvw-centre
-    view.scatter(*relative[shown].T, color='#9da7ad', s=1, alpha=.3, linewidths=0, depthshade=False)
-    low = cfg['minimum_depth_m']*1000
-    high = max(low+5, min(cfg['maximum_depth_m']*1000, float(row['max_depth_m'])*1000))
-    colored = view.scatter(*relative[selected].T, c=depth[selected]*1000, cmap='YlOrRd',
-                           vmin=low, vmax=high, s=5, linewidths=0, depthshade=False)
-    origin = surface['uv_origin']; resolution = float(surface['resolution_m'])
-    lower = uvw[context, :2].min(axis=0); upper = uvw[context, :2].max(axis=0)
-    ix0, iy0 = np.maximum(0, np.floor((lower-origin)/resolution).astype(int))
-    ix1, iy1 = np.minimum(np.array(surface['reference_w'].shape[::-1])-1,
-                         np.ceil((upper-origin)/resolution).astype(int))
-    xs = np.arange(ix0, ix1+1, max(1, (ix1-ix0)//45))
-    ys = np.arange(iy0, iy1+1, max(1, (iy1-iy0)//45))
-    xx, yy = np.meshgrid(xs, ys)
-    if xx.size:
-        reference = np.where(surface['valid_reference'][yy, xx], surface['reference_w'][yy, xx], np.nan)
-        view.plot_surface(origin[0]+(xx+.5)*resolution-centre[0],
-                          origin[1]+(yy+.5)*resolution-centre[1], reference-centre[2],
-                          color='#369a72', alpha=.12, linewidth=0, rcount=46, ccount=46)
-    bounds = relative[context].max(axis=0)-relative[context].min(axis=0)
-    view.set_box_aspect(np.maximum(bounds, 1e-6))
-    view.view_init(elev=28, azim=-62)
-    # Centimetre-scale normal variation on a metre-scale face makes Z tick labels overlap.
-    # Keep the physical aspect ratio and read depth from the color scale instead.
-    view.set_zticks([])
-    view.set(title='3D / green: supported local reference surface',
-             xlabel='Relative U (m)', ylabel='Relative V (m)', zlabel='Relative W (m)')
-    view.xaxis.labelpad = 12
-    view.yaxis.labelpad = 12
-    figure.colorbar(colored, ax=view, shrink=.6, pad=.08, label='Inward depth (mm)')
-    figure.suptitle(f'{damage_id} | geometric spalling candidate | {row["covered_area_m2"]:.3f} m²', fontsize=20)
-    coordinate_note = 'Geometry: original E57; location: registered E57.' if registered else 'TLS local coordinates.'
-    figure.supxlabel(f'{len(source_ids):,} original points | cell mean depth {row["mean_depth_m"]*1000:.1f} mm | '
-                       'Candidate status; manual verification required. '+coordinate_note, fontsize=11)
-    figure.savefig(path, dpi=240)
-    plt.close(figure)
 
 
 def export_results(cfg, intermediate, data_dir, output):
@@ -187,8 +124,10 @@ def export_results(cfg, intermediate, data_dir, output):
                     (uvw[:, 0] >= lower[0]) & (uvw[:, 0] <= upper[0]) &
                     (uvw[:, 1] >= lower[1]) & (uvw[:, 1] <= upper[1]) &
                     (np.abs(uvw[:, 2]-np.median(uvw[source_ids, 2])) < cfg['global_normal_distance_limit_m']))
-                snapshot(stage/png_path, damage_id, row, xyz, rgb, uvw, source_ids, context, depth, surface, cfg,
-                         registered=mapper is not None)
+                display_basis = basis
+                if mapper:
+                    display_basis = basis@np.asarray(registration_info[part]['diagnostic_rotation']).T
+                snapshot(stage/png_path, damage_id, positions, source_ids, context, depth, display_basis)
                 result = result_row(part, row, positions, source_ids, data_dir, output)
                 if mapper:
                     selected = cell_regions == int(row['candidate_id'])
@@ -221,7 +160,7 @@ def export_results(cfg, intermediate, data_dir, output):
                 final_rows.append(result)
                 print(f'EXPORT {damage_id}: {len(source_ids):,} points', flush=True)
         final_rows.sort(key=lambda row: row['damage_id'])
-        write_csv(stage/'Result/SPL_result.csv', final_rows, FIELDS)
+        write_csv(stage/'Result/SPL_result.csv', [{key:row[key] for key in FIELDS} for row in final_rows], FIELDS)
         if mapper:
             (intermediate/'mapping_summary.json').write_text(json.dumps({
                 'model':str(mapper.path.resolve()), 'method':'nearest_point_to_filled_triangle',

@@ -22,6 +22,7 @@ TLS/
 │   ├── process.py
 │   ├── local_plane_spalling.py
 │   ├── export_results.py
+│   ├── visualize_results.py
 │   ├── registered_source.py
 │   ├── model_mapping.py
 │   ├── config.json
@@ -43,7 +44,7 @@ TLS/
 | `dachung_part2.e57` | 1,822,885 | 19 | 0 | 19 | 5 |
 | 합계 | 5,024,552 | 42 | 23 | 42 | 48 |
 
-각 후보는 기존 검출 ID(`TLS1-xxxx`, `TLS2-xxxx`)를 유지하며, LAS 1개·PNG 1개·`SPL_result.csv` 1행에 대응합니다. CSV는 손상별 결과 파일 하나만 제공합니다. 여러 Grid에 걸친 부분 면적은 내부적으로 계산하고, 손상별 행에는 대표 Grid의 면적·점유율과 전체 배정 면적·미배정 면적·연결된 Grid 수를 기록합니다. 길고 좁은 이음새, 경계, 기준면 지지가 부족한 영역 등 `geometry_review` 상태인 48건은 최종 산출물에서 제외하고 작업 캐시에 유지합니다.
+각 후보는 기존 검출 ID(`TLS1-xxxx`, `TLS2-xxxx`)를 유지하며, LAS 1개·PNG 1개·`SPL_result.csv` 1행에 대응합니다. CSV는 손상별 결과 파일 하나만 제공합니다. 손상명은 `박락`으로 표기하며, 기하 검출 결과의 박락 여부는 현장 확인이 필요합니다. 여러 Grid에 걸친 부분 면적은 내부적으로 계산하고, 손상별 행에는 대표 Grid의 면적·점유율과 연결된 Grid 수를 기록합니다. 길고 좁은 이음새, 경계, 기준면 지지가 부족한 영역 등 `geometry_review` 상태인 48건은 최종 산출물에서 제외하고 작업 캐시에 유지합니다.
 
 ## 알고리즘과 설정
 
@@ -73,7 +74,7 @@ TLS/
 
 `Code/model_mapping.py`는 glTF의 전체 노드 변환을 적용하고 `(X,Y,Z) → (X,-Z,Y)`로 Z-up XYZ를 구성합니다. Grid 1,434개와 부재 13개의 삼각형 표면까지의 최단거리를 계산합니다. 삼각형의 내부·변·꼭짓점을 모두 평가하며, Grid 중심점까지의 거리로 대체하지 않습니다.
 
-손상 중심에서 가장 가까운 Grid와 부재를 각각 구하고 **표면까지 1m 이하**일 때 연결합니다. Grid가 멀어도 부재가 1m 이내라면 부재만 연결하고 `mapping_status=member_only`로 기록합니다. 현재 Part1 중심의 Grid 이격은 0.0016~0.1254m입니다. Part2는 부재 이격이 0.4005~0.8095m여서 부재에 연결되지만, Grid 이격은 1.8036~6.8120m여서 Grid와 점유율이 빈값입니다. 거리만으로 Part2의 등록 정확성이나 Grid 누락 원인을 확정하지 않습니다.
+손상 중심에서 가장 가까운 Grid와 부재를 각각 구하고 **표면까지 1m 이하**일 때 연결합니다. Grid가 멀어도 부재가 1m 이내라면 부재만 연결합니다. 현재 Part1 중심의 Grid 이격은 0.0016~0.1254m입니다. Part2는 부재 이격이 0.4005~0.8095m여서 부재에 연결되지만, Grid 이격은 1.8036~6.8120m여서 Grid와 점유율이 빈값입니다. 이격과 내부 매핑 상태는 작업 캐시에서 관리하며 손상별 CSV에는 포함하지 않습니다. 거리만으로 Part2의 등록 정확성이나 Grid 누락 원인을 확정하지 않습니다.
 
 면적 분할은 검출에 쓰인 **3cm 분석 셀 단위의 근사**입니다. 각 셀의 대응 등록점 평균 위치에서 가장 가까운 Grid 삼각형을 찾아, 1m 이내인 셀의 면적을 해당 Grid에 한 번 배정합니다. 셀 면적은 기존 기준면의 기울기를 반영하며, 배정 면적과 미배정 면적의 합이 원래 손상 면적과 일치하는지 확인합니다. 현재 Part1은 6.7596m² 모두 배정되고, Part2는 2.0030m²가 Grid 미배정 상태입니다.
 
@@ -81,13 +82,13 @@ TLS/
 grid_damage_ratio_pct = grid_damage_area_m2 / 25.0 × 100
 ```
 
-분모는 모델 속성의 실면적과 관계없이 요청한 고정값 **25m²**입니다. `SPL_result.csv`의 `grid_damage_area_m2`·`grid_damage_ratio_pct`는 손상 중심에 가장 가까운 대표 Grid에 배정된 부분의 면적·점유율입니다. 손상이 여러 Grid에 걸치면 `mapped_area_m2`에 모든 Grid에 배정된 면적 합계, `mapped_grid_count`에 연결된 Grid 수를 기록합니다. 이 파일은 Grid별 전체 집계가 아닌 손상별 결과입니다. 미매핑은 점유율 0%로 판정하지 않고 빈값으로 둡니다.
+분모는 모델 속성의 실면적과 관계없이 요청한 고정값 **25m²**입니다. `SPL_result.csv`의 `grid_damage_area_m2`·`grid_damage_ratio_pct`는 손상 중심에 가장 가까운 대표 Grid에 배정된 부분의 면적·점유율입니다. 손상이 여러 Grid에 걸치면 `mapped_grid_count`에 연결된 Grid 수를 기록합니다. 이 파일은 Grid별 전체 집계가 아닌 손상별 결과입니다. 미매핑은 점유율 0%로 판정하지 않고 빈값으로 둡니다.
 
 ## 산출물
 
 LAS에는 실제 후보 관측점의 등록 XYZ/RGB와 `depth_m`, `candidate_id`, `source_vertex_id`를 저장합니다. `source_vertex_id`는 원본 및 등록 E57 스캔의 공통된 0부터 시작하는 점 인덱스입니다. XYZ는 등록 파일과 같은 댐 모델 Z-up XYZ이며 LAS 저장 간격은 0.000001m입니다. 저장 간격이 등록 파일 자체의 좌표 정밀도를 높이지는 않습니다. 깊이는 원본의 정밀한 관측점에서 계산하고 색상은 E57의 8비트 RGB를 LAS의 16비트 RGB로 변환합니다.
 
-PNG는 3840×2160이며, 원본 RGB와 빨간 후보 점을 표시한 정면도, 깊이 색상과 초록색 기준면을 표시한 3D 시점을 함께 제공합니다. 원본 형상의 표면 좌표계로 시각화하며 깊이를 과장하지 않습니다.
+PNG는 `ROV_LiDAR`의 overlay 형식을 따른 **3840×2160 단일 3D 이미지**입니다. 어두운 배경에 주변 관측점을 회색으로, 손상 관측점을 청록·연두·노랑·주황의 깊이 색상으로 겹쳐 표시합니다. 범례·컬러바·축·제목·설명은 표시하지 않습니다. 등록 E57의 실제 XYZ를 직교 좌표계로 회전·평행이동해 표시하며, 깊이와 형상을 과장하지 않습니다. 색상 범위는 해당 손상점 깊이의 1~99백분위 구간으로 정규화하고 카메라는 원근 왜곡 없는 직교 투영을 사용합니다.
 
 CSV는 UTF-8 BOM 인코딩이며 경로는 `Output/Result` 기준입니다.
 
@@ -95,24 +96,19 @@ CSV는 UTF-8 BOM 인코딩이며 경로는 `Output/Result` 기준입니다.
 |---|---|
 | `dataset` | 원본 E57 이름에서 확장자를 제외한 값 |
 | `damage_id`, `source_damage_id` | 기존 후보 ID, 해당 Part 내부의 영역 번호 |
-| `damage_type`, `damage_name_ko`, `detection_status` | `SPL`, 박락 후보, `spalling_candidate` |
+| `damage_type`, `damage_name_ko` | `SPL`, `박락` |
 | `world_center_x_m`, `world_center_y_m`, `world_center_z_m` | 개별 후보의 대응 등록 관측점 XYZ의 산술평균 중심점(m). 후보 LAS와 같은 좌표계 |
-| `coordinate_frame` | `Dam_model_Z_up_XYZ` |
-| `crs` | 확인된 EPSG 코드가 없어 현재 빈값 |
-| `grid_id`, `grid_guid` | 손상 중심에서 가장 가까운 모델 Grid. 1m 밖이면 빈값 |
-| `member_name`, `member_guid` | 가장 가까운 모델 부재. 1m 밖이면 빈값 |
-| `mapping_status` | 현재 `mapped` 23건, `member_only` 19건. 부분 셀 매핑과 전체 이격 초과도 별도 상태로 기록 |
+| `grid_id` | 손상 중심에서 가장 가까운 모델 Grid. 1m 밖이면 빈값 |
+| `member_name` | 가장 가까운 모델 부재. 1m 밖이면 빈값 |
 | `area_m2` | 후보 셀의 추정 표면 면적(m²) |
-| `mean_depth_m`, `p95_depth_m`, `max_depth_m` | 후보 셀 깊이의 평균, 95백분위, 최대값(m) |
+| `mean_depth_m` | 후보 셀 깊이의 평균(m) |
 | `point_count` | 후보 LAS의 관측점 수 |
-| `nearest_grid_distance_m`, `nearest_member_distance_m` | 손상 중심에서 가장 가까운 각 표면까지의 거리(m). 미매핑도 거리 기록 |
-| `mapping_max_distance_m` | 허용 이격, 현재 1m |
 | `grid_area_m2` | 대표 Grid의 점유율 분모, 현재 25m² |
 | `grid_damage_area_m2`, `grid_damage_ratio_pct` | 대표 Grid에 배정된 부분 손상 면적(m²), 해당 면적 ÷ 25 × 100(%) |
-| `mapped_area_m2`, `unmapped_area_m2`, `mapped_grid_count` | 모든 Grid에 배정된 손상 면적, 미배정 면적, 연결된 Grid 수 |
-| `source_data_path`, `registered_data_path`, `pointcloud_path`, `visualization_path` | 원본 E57, 등록 E57, 후보 LAS, 후보 PNG의 상대경로 |
+| `mapped_grid_count` | 손상이 연결된 Grid 수 |
+| `registered_data_path`, `pointcloud_path`, `visualization_path` | 등록 E57, 후보 LAS, 후보 PNG의 상대경로 |
 
-CSV의 3차원 위치는 `world_center_x_m`, `world_center_y_m`, `world_center_z_m` 세 컬럼으로 제공합니다. 각 값은 해당 후보의 실제 등록 관측점 중심이며, 모델의 정합 기준 좌표계에 해당합니다. EPSG 코드는 확인되지 않아 `crs`는 빈값입니다.
+CSV는 20개 컬럼을 사용하며, 3차원 위치는 `world_center_x_m`, `world_center_y_m`, `world_center_z_m` 세 컬럼으로 제공합니다. 각 값은 해당 후보의 실제 등록 관측점 중심이며, 모델의 정합 기준 Z-up XYZ 좌표계에 해당합니다. EPSG 코드는 확인되지 않았습니다. 원본과 등록 데이터는 면적·깊이의 정밀도와 등록 위치를 각각 유지하기 위해 모두 포함합니다.
 
 ## 실행
 
