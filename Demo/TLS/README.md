@@ -46,24 +46,6 @@ TLS/
 
 손상 ID는 `TLS1-xxxx`, `TLS2-xxxx`이며, 각 손상은 CSV 1행·LAS 1개·PNG 1개에 대응합니다.
 
-## 알고리즘과 설정
-
-`Code/local_plane_spalling.py`는 3cm 셀별 관측점의 중앙값으로 표면을 구성합니다. 3m 구간에서 중심 1.5m를 제외한 주변점을 이용해 RANSAC 기준평면을 구하고, 0.75m 간격으로 구간을 겹쳐 평가합니다.
-
-깊이·면적·점 수·주변 정상면 지지 조건을 만족하는 셀을 묶고, 길고 좁은 이음새와 경계 영역을 제외합니다. CSV의 면적·평균 깊이는 셀 기반 추정치이며, LAS의 깊이는 개별 관측점 값입니다.
-
-| `Code/config.json` 설정 | 현재 값 | 역할 |
-|---|---:|---|
-| `grid_resolution_m` | 0.03m | 분석 셀 크기 |
-| `reference_patch_size_m` | 3.0m | 주변 기준평면 추출 구간 |
-| `evaluation_core_size_m` | 1.5m | 평가하는 중심 영역 |
-| `patch_stride_m` | 0.75m | 구간 이동 간격 |
-| `reference_ransac_threshold_m` | 0.01m | 기준평면 인라이어 허용 거리 |
-| `minimum_depth_m` | 0.025m | 최소 안쪽 깊이 |
-| `maximum_depth_m` | 0.20m | 후보 점의 최대 깊이 |
-| `minimum_candidate_area_m2` | 0.01m² | 최소 후보 면적 |
-| `joint_like_aspect_ratio` | 6 | 이 값 이상인 길쭉한 영역을 재검토로 분류 |
-
 ## 산출물
 
 **LAS**는 손상 관측점의 등록 XYZ/RGB와 `depth_m`, `candidate_id`, `source_vertex_id`를 저장합니다. `source_vertex_id`는 해당 E57의 0부터 시작하는 점 인덱스입니다.
